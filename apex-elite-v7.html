@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX — Elite Training System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #060810;
+  --bg1:   #0a0e16;
+  --bg2:   #0f1520;
+  --bg3:   #181f2c;
+  --bdr:   rgba(255,255,255,0.07);
+  --bdr2:  rgba(255,255,255,0.13);
+  --a:     #00f0a8;
+  --a2:    #00c488;
+  --adim:  rgba(0,240,168,0.08);
+  --abdr:  rgba(0,240,168,0.25);
+  --or:    #ff6d3a;
+  --ordim: rgba(255,109,58,0.09);
+  --bl:    #4da8ff;
+  --bldim: rgba(77,168,255,0.09);
+  --yw:    #ffc947;
+  --ywdim: rgba(255,201,71,0.09);
+  --rd:    #ff4d6d;
+  --tx:    #e2e8f0;
+  --tx2:   #a0b4c8;
+  --tx3:   #6a84a0;
+  --fh:    'Syne', sans-serif;
+  --fb:    'DM Sans', sans-serif;
+  --fm:    'JetBrains Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:14px;line-height:1.6;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:0.5}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(6,8,16,0.93);backdrop-filter:blur(28px);border-bottom:1px solid var(--bdr);padding:0 20px}
+.nav-in{max-width:1020px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:50px}
+.nav-logo{font-family:var(--fh);font-size:18px;font-weight:800;letter-spacing:5px;color:var(--a)}
+.nav-logo span{color:var(--tx3)}
+.nav-tag{font-family:var(--fm);font-size:10px;letter-spacing:1.5px;background:var(--adim);border:1px solid var(--abdr);color:var(--a);padding:3px 12px;border-radius:100px}
+
+/* HERO */
+.hero{max-width:1020px;margin:0 auto;padding:52px 20px 40px;position:relative}
+.hero-glow{position:absolute;top:0;left:-80px;right:0;bottom:0;background:radial-gradient(ellipse 55% 55% at 20% 30%,rgba(0,240,168,0.05) 0%,transparent 65%);pointer-events:none}
+.hero-pre{font-family:var(--fm);font-size:10px;color:var(--a);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px}
+.hero-h1{font-family:var(--fh);font-size:clamp(56px,8.5vw,100px);font-weight:800;line-height:0.88;letter-spacing:-1px;margin-bottom:18px}
+.hero-h1 em{font-style:normal;color:var(--a)}
+.hero-p{font-size:14px;color:var(--tx2);font-weight:300;line-height:1.8;max-width:560px;margin-bottom:22px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px}
+.chip{font-family:var(--fm);font-size:10px;letter-spacing:0.5px;padding:4px 12px;border-radius:4px;border:1px solid var(--bdr2);color:var(--tx2)}
+.chip.a{border-color:var(--abdr);color:var(--a);background:var(--adim)}
+
+/* SPLIT OVERVIEW BAR */
+.split-bar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:32px}
+.sb-item{background:var(--bg1);border:1px solid var(--bdr);border-radius:10px;padding:12px 6px;text-align:center}
+.sb-day{font-family:var(--fm);font-size:9px;color:var(--tx3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.sb-focus{font-family:var(--fh);font-size:13px;font-weight:700;line-height:1.1}
+.sb-item.active{border-color:var(--abdr);background:var(--adim)}
+.sb-item.active .sb-day{color:var(--a)}
+.sb-item.rest-day{border-color:rgba(255,77,109,0.15)}
+.sb-item.rest-day .sb-focus{color:var(--tx3)}
+.sb-item.cond-day{border-color:rgba(255,109,58,0.25)}
+.sb-item.cond-day .sb-focus{color:var(--or)}
+
+/* PAGE WRAP */
+.pw{max-width:1020px;margin:0 auto;padding:0 20px 80px}
+
+/* SECTION LABEL */
+.sec-label{font-family:var(--fm);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--tx3);padding:28px 0 10px}
+
+/* COLLAPSE */
+.col-sec{margin-bottom:8px}
+.col-hdr{display:flex;align-items:center;gap:12px;background:var(--bg1);border:1px solid var(--bdr);border-radius:12px;padding:15px 18px;cursor:pointer;user-select:none;transition:border-color .2s,background .2s}
+.col-hdr:hover{border-color:var(--bdr2);background:var(--bg2)}
+.col-hdr.open{border-bottom-left-radius:0;border-bottom-right-radius:0;border-color:var(--bdr2)}
+.col-icon{font-size:16px;flex-shrink:0}
+.col-title{font-family:var(--fh);font-size:17px;font-weight:700;letter-spacing:0.5px;flex:1}
+.col-meta{font-family:var(--fm);font-size:10px;color:var(--tx2);letter-spacing:0.8px}
+.col-arr{font-size:11px;color:var(--tx3);transition:transform .28s;flex-shrink:0}
+.col-hdr.open .col-arr{transform:rotate(180deg)}
+.col-body{display:none;background:var(--bg1);border:1px solid var(--bdr2);border-top:none;border-radius:0 0 12px 12px;overflow:hidden}
+.col-body.open{display:block}
+
+/* WEEK SELECTOR */
+.week-sel{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:20px 0 12px}
+.day-btn{background:var(--bg1);border:1px solid var(--bdr);border-radius:10px;padding:10px 5px;text-align:center;cursor:pointer;user-select:none;transition:all .18s}
+.day-btn:hover{border-color:var(--bdr2);background:var(--bg2)}
+.day-btn.active{border-color:var(--abdr);background:var(--adim)}
+.day-btn.active.cond{border-color:rgba(255,109,58,0.4);background:var(--ordim)}
+.day-btn.active.rec{border-color:rgba(77,168,255,0.35);background:var(--bldim)}
+.day-btn.active.rest{border-color:rgba(255,77,109,0.25);background:rgba(255,77,109,0.05)}
+.db-dn{font-family:var(--fm);font-size:9px;color:var(--tx3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.db-dl{font-family:var(--fh);font-size:13px;font-weight:700;line-height:1.1}
+.db-sub{font-family:var(--fm);font-size:8px;color:var(--tx2);margin-top:3px}
+.day-btn.active .db-dn{color:var(--a)}
+.day-btn.active.cond .db-dn{color:var(--or)}
+.day-btn.active.rec .db-dn{color:var(--bl)}
+.day-btn.active.rest .db-dn{color:var(--rd)}
+
+/* DAY PANEL */
+.day-panel{display:none}
+.day-panel.active{display:block}
+
+/* DAY HERO */
+.day-top{border-radius:14px;border:1px solid var(--bdr);overflow:hidden;margin-bottom:8px;background:var(--bg1)}
+.day-top-inner{display:flex;align-items:flex-start;gap:16px;padding:22px 24px 16px}
+.day-num-big{font-family:var(--fh);font-size:80px;font-weight:800;line-height:0.85;color:var(--bg3);flex-shrink:0;user-select:none}
+.day-meta{flex:1}
+.day-dow{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:5px}
+.day-name{font-family:var(--fh);font-size:34px;font-weight:800;line-height:1;letter-spacing:0.5px;margin-bottom:4px}
+.day-sub{font-size:13px;color:var(--tx2);font-style:italic;margin-bottom:10px}
+.day-bdgs{display:flex;flex-wrap:wrap;gap:6px}
+.bdg{font-family:var(--fm);font-size:9px;letter-spacing:1px;padding:3px 10px;border-radius:4px;border:1px solid;text-transform:uppercase}
+.bdg.str{background:var(--adim);color:var(--a);border-color:var(--abdr)}
+.bdg.cond{background:var(--ordim);color:var(--or);border-color:rgba(255,109,58,0.3)}
+.bdg.core{background:var(--ywdim);color:var(--yw);border-color:rgba(255,201,71,0.3)}
+.bdg.rec{background:var(--bldim);color:var(--bl);border-color:rgba(77,168,255,0.3)}
+.bdg.rest{background:rgba(255,77,109,0.06);color:var(--rd);border-color:rgba(255,77,109,0.2)}
+.day-time{flex-shrink:0;text-align:right}
+.dt-val{font-family:var(--fh);font-size:44px;font-weight:800;line-height:1}
+.dt-lbl{font-family:var(--fm);font-size:9px;color:var(--tx3);letter-spacing:1.5px;text-transform:uppercase}
+.day-tl{background:var(--bg2);border-top:1px solid var(--bdr);padding:10px 24px;display:flex;gap:8px}
+.tl-seg{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
+.tl-bar{height:4px;border-radius:100px;width:100%}
+.tl-lbl{font-family:var(--fm);font-size:8px;color:var(--tx2);letter-spacing:0.8px;text-align:center;white-space:nowrap}
+
+/* INNER BLOCKS */
+.blk{background:var(--bg1);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin-bottom:8px}
+.blk-hdr{display:flex;align-items:center;gap:11px;padding:13px 18px;cursor:pointer;user-select:none;border-bottom:1px solid var(--bdr);transition:background .15s}
+.blk-hdr:hover{background:rgba(255,255,255,0.013)}
+.blk-hdr.open{background:rgba(255,255,255,0.018)}
+.blk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.blk-title{font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0.5px;flex:1}
+.blk-meta{font-family:var(--fm);font-size:10px;color:var(--tx2)}
+.blk-arr{font-size:10px;color:var(--tx3);transition:transform .25s}
+.blk-hdr.open .blk-arr{transform:rotate(180deg)}
+.blk-body{display:none}
+.blk-body.open{display:block}
+
+/* EXERCISE TABLE */
+.ex-wrap{overflow-x:auto}
+.ex-tbl{width:100%;border-collapse:collapse}
+.ex-tbl th{font-family:var(--fm);font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:1.5px;text-align:left;padding:8px 14px;background:rgba(0,0,0,0.25);border-bottom:1px solid var(--bdr)}
+.ex-tbl td{padding:13px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.035);vertical-align:top}
+.ex-tbl tr:last-child td{border-bottom:none}
+.ex-tbl tr:hover td{background:rgba(255,255,255,0.012)}
+.ex-name-cell{min-width:240px}
+.ex-name{font-weight:600;color:var(--tx);font-size:13.5px;margin-bottom:4px}
+.ex-note{font-size:12px;color:var(--tx2);font-style:italic;margin-top:3px;line-height:1.5}
+
+/* Muscle tags */
+.muscle-tags{display:flex;flex-wrap:wrap;gap:4px;margin:5px 0}
+.mt{font-family:var(--fm);font-size:9px;letter-spacing:0.5px;padding:2px 7px;border-radius:3px;border:1px solid}
+.mt.chest{background:rgba(255,109,58,0.1);color:#ff9a7a;border-color:rgba(255,109,58,0.25)}
+.mt.shoulder{background:rgba(77,168,255,0.1);color:#80c5ff;border-color:rgba(77,168,255,0.25)}
+.mt.tricep{background:rgba(200,130,255,0.1);color:#d4a0ff;border-color:rgba(200,130,255,0.25)}
+.mt.bicep{background:rgba(255,201,71,0.12);color:#ffd275;border-color:rgba(255,201,71,0.3)}
+.mt.back{background:rgba(0,240,168,0.1);color:var(--a);border-color:var(--abdr)}
+.mt.core{background:rgba(255,201,71,0.1);color:#ffd275;border-color:rgba(255,201,71,0.25)}
+.mt.glute{background:rgba(255,77,109,0.1);color:#ff8fa3;border-color:rgba(255,77,109,0.25)}
+.mt.quad{background:rgba(255,160,50,0.1);color:#ffb870;border-color:rgba(255,160,50,0.25)}
+.mt.ham{background:rgba(120,210,120,0.1);color:#96e096;border-color:rgba(120,210,120,0.25)}
+.mt.calf{background:rgba(160,130,255,0.1);color:#c8b0ff;border-color:rgba(160,130,255,0.25)}
+.mt.serratus{background:rgba(0,210,255,0.1);color:#70e4ff;border-color:rgba(0,210,255,0.25)}
+.mt.trap{background:rgba(255,210,100,0.1);color:#ffd880;border-color:rgba(255,210,100,0.25)}
+.mt.rear-delt{background:rgba(210,150,255,0.1);color:#d4a8ff;border-color:rgba(210,150,255,0.25)}
+.mt.forearm{background:rgba(180,220,150,0.1);color:#b4e090;border-color:rgba(180,220,150,0.25)}
+
+/* table data */
+.td-sets{font-family:var(--fm);font-size:13px;color:var(--a);white-space:nowrap;font-weight:500}
+.td-reps{font-family:var(--fm);font-size:12px;color:var(--tx);white-space:nowrap}
+.td-rest{font-family:var(--fm);font-size:12px;color:var(--tx2);white-space:nowrap}
+.rpe{display:inline-block;font-family:var(--fm);font-size:9px;letter-spacing:0.8px;padding:2px 8px;border-radius:3px;text-transform:uppercase;white-space:nowrap}
+.rpe.h{background:rgba(255,77,109,0.12);color:var(--rd)}
+.rpe.m{background:rgba(255,201,71,0.1);color:var(--yw)}
+.rpe.l{background:var(--adim);color:var(--a)}
+
+/* YouTube link */
+.yt-link{display:inline-flex;align-items:center;gap:5px;font-family:var(--fm);font-size:9px;letter-spacing:1px;color:#ff5555;border:1px solid rgba(255,60,60,0.3);background:rgba(255,60,60,0.07);border-radius:4px;padding:2px 9px;text-decoration:none;margin-top:6px;transition:background .15s,border-color .15s;white-space:nowrap}
+.yt-link:hover{background:rgba(255,60,60,0.16);border-color:rgba(255,60,60,0.55);color:#ff7777}
+
+/* finisher */
+.finisher{background:linear-gradient(90deg,rgba(255,109,58,0.08),transparent 80%);border-top:1px solid rgba(255,109,58,0.18);padding:12px 18px;display:flex;gap:10px;align-items:flex-start}
+.fin-lbl{font-family:var(--fm);font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--or);flex-shrink:0;padding-top:2px}
+.fin-txt{font-size:12.5px;color:var(--tx2);line-height:1.55}
+
+/* coach note */
+.cn{margin:10px 18px;background:rgba(77,168,255,0.06);border-left:3px solid var(--bl);border-radius:0 8px 8px 0;padding:10px 14px;font-size:12.5px;color:var(--tx2);font-style:italic;line-height:1.65}
+.cn strong{color:var(--bl);font-style:normal}
+
+/* CARDIO BLOCK */
+.cardio-blk{padding:16px 18px}
+.ca{border-radius:10px;padding:16px;border:1px solid}
+.ca.liss{border-color:rgba(0,240,168,0.22);background:rgba(0,240,168,0.04)}
+.ca.hiit{border-color:rgba(255,109,58,0.22);background:rgba(255,109,58,0.04)}
+.ca.ath{border-color:rgba(77,168,255,0.22);background:rgba(77,168,255,0.04)}
+.ca.none{border-color:var(--bdr);background:rgba(255,255,255,0.02)}
+.ca-tl{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.ca.liss .ca-tl{color:var(--a)}
+.ca.hiit .ca-tl{color:var(--or)}
+.ca.ath .ca-tl{color:var(--bl)}
+.ca.none .ca-tl{color:var(--tx3)}
+.ca-name{font-family:var(--fh);font-size:20px;font-weight:700;letter-spacing:0.5px;margin-bottom:8px}
+.ca-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.ca-pill{background:rgba(255,255,255,0.06);border:1px solid var(--bdr2);border-radius:4px;padding:2px 10px;font-family:var(--fm);font-size:10px;color:var(--tx2)}
+.ca-desc{font-size:12.5px;color:var(--tx2);line-height:1.65}
+.ca-proto{margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr);font-size:12.5px;color:var(--tx2);line-height:1.65}
+.ca-proto strong{color:var(--tx)}
+.ca-why{margin-top:10px;background:rgba(255,255,255,0.03);border-radius:6px;padding:9px 12px;font-family:var(--fm);font-size:10.5px;color:var(--tx2);line-height:1.65}
+.ca-why strong{color:var(--tx)}
+
+/* CORE BLOCK */
+.core-inner{padding:14px 18px}
+.core-section-title{font-family:var(--fm);font-size:9px;color:var(--tx2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bdr)}
+.core-row{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:14px}
+.core-row:last-child{border-bottom:none}
+.core-nm{font-size:13.5px;font-weight:600;margin-bottom:2px}
+.core-note{font-size:12px;color:var(--tx2);font-style:italic;margin-top:3px;line-height:1.5}
+.core-rx{font-family:var(--fm);font-size:11px;color:var(--yw);white-space:nowrap;padding-top:3px}
+
+/* REST DAY */
+.rest-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:18px}
+.rest-item{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:16px}
+.ri-icon{font-size:22px;margin-bottom:8px}
+.ri-title{font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0.5px;margin-bottom:6px}
+.ri-desc{font-size:12.5px;color:var(--tx2);line-height:1.65}
+
+/* CARDIO ENGINE */
+.cde{padding:0 18px 18px}
+.cde-intro{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:18px;padding:13px 15px;background:var(--bg2);border-left:3px solid var(--bl);border-radius:0 8px 8px 0}
+.cde-type-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+.cde-type{border-radius:10px;padding:14px;border:1px solid}
+.cde-type.liss{border-color:rgba(0,240,168,0.22);background:rgba(0,240,168,0.04)}
+.cde-type.hiit{border-color:rgba(255,109,58,0.22);background:rgba(255,109,58,0.04)}
+.cde-type.ath{border-color:rgba(77,168,255,0.22);background:rgba(77,168,255,0.04)}
+.cde-tl{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.cde-type.liss .cde-tl{color:var(--a)}
+.cde-type.hiit .cde-tl{color:var(--or)}
+.cde-type.ath .cde-tl{color:var(--bl)}
+.cde-tn{font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:6px}
+.cde-td{font-size:12.5px;color:var(--tx2);line-height:1.6}
+.dtbl{width:100%;border-collapse:collapse;margin-bottom:14px}
+.dtbl th{font-family:var(--fm);font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:1.5px;text-align:left;padding:8px 12px;border-bottom:1px solid var(--bdr);background:rgba(0,0,0,0.18)}
+.dtbl td{padding:10px 12px;font-size:12.5px;color:var(--tx2);border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:top}
+.dtbl tr:last-child td{border-bottom:none}
+.dtbl tr:hover td{background:rgba(255,255,255,0.012)}
+.dtbl td strong{color:var(--tx)}
+.ct-liss{background:var(--adim);color:var(--a);border:1px solid var(--abdr);font-family:var(--fm);font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.ct-hiit{background:var(--ordim);color:var(--or);border:1px solid rgba(255,109,58,0.3);font-family:var(--fm);font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.ct-none{background:rgba(255,255,255,0.04);color:var(--tx2);border:1px solid var(--bdr2);font-family:var(--fm);font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.warn-strip{background:rgba(255,77,109,0.06);border:1px solid rgba(255,77,109,0.22);border-radius:8px;padding:12px 14px;font-size:12.5px;color:rgba(255,190,200,0.9);line-height:1.65}
+.warn-strip strong{color:var(--rd)}
+
+/* REFERENCE */
+.ref-pad{padding:16px 18px}
+.ref-p{font-size:13px;color:var(--tx2);line-height:1.75;margin-bottom:10px}
+.ref-p strong{color:var(--tx)}
+.ref-p:last-child{margin-bottom:0}
+.ref-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 18px}
+.ref-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 18px 18px}
+.rc{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:16px}
+.rc-t{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:0.5px;margin-bottom:10px}
+.rc-l{list-style:none;display:flex;flex-direction:column;gap:7px}
+.rc-l li{font-size:12.5px;color:var(--tx2);line-height:1.6;padding-left:14px;position:relative}
+.rc-l li::before{content:'›';position:absolute;left:0;color:var(--a)}
+.macro-r{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.macro-lbl{width:72px;font-family:var(--fm);font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--tx2)}
+.macro-bar{flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:100px;overflow:hidden}
+.macro-fill{height:100%;border-radius:100px}
+.macro-val{font-family:var(--fm);font-size:11px;color:var(--tx);width:55px;text-align:right}
+.cal-big{font-family:var(--fh);font-size:52px;font-weight:800;line-height:1;margin-bottom:2px}
+.cal-sub{font-family:var(--fm);font-size:9px;color:var(--tx2);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.pci-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 18px 18px}
+.pci{background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;padding:12px;text-align:center}
+.pci-i{font-size:18px;margin-bottom:5px}
+.pci-l{font-family:var(--fm);font-size:9px;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.pci-n{font-size:11px;color:var(--tx2);line-height:1.4}
+.period-row{display:flex;gap:0;margin:0 18px 18px}
+.pw{flex:1;text-align:center;padding:10px 4px;border:1px solid var(--bdr)}
+.pw:first-child{border-radius:8px 0 0 8px}
+.pw:last-child{border-radius:0 8px 8px 0}
+.pw+.pw{border-left:none}
+.pw.act{background:var(--adim);border-color:var(--abdr)}
+.pw-n{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--tx2)}
+.pw.act .pw-n{color:var(--a)}
+.pw-l{font-family:var(--fm);font-size:8px;color:var(--tx3);letter-spacing:0.8px;text-transform:uppercase}
+.pw.act .pw-l{color:var(--a2)}
+
+footer{border-top:1px solid var(--bdr);padding:28px 20px;text-align:center}
+.foot-logo{font-family:var(--fh);font-size:20px;font-weight:800;letter-spacing:6px;color:var(--a);margin-bottom:6px}
+.foot-sub{font-family:var(--fm);font-size:10px;color:var(--tx3);letter-spacing:1.5px}
+.foot-disc{margin-top:12px;font-size:11px;color:var(--tx3);max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
+
+@media(max-width:820px){
+  .split-bar,.week-sel{grid-template-columns:repeat(4,1fr)}
+  .cde-type-grid,.ref-grid-2,.ref-grid-3{grid-template-columns:1fr}
+  .rest-grid{grid-template-columns:1fr}
+  .pci-grid{grid-template-columns:1fr 1fr}
+  .day-num-big{font-size:54px}
+}
+@media(max-width:520px){
+  .week-sel{grid-template-columns:repeat(4,1fr)}
+  .day-top-inner{flex-wrap:wrap}
+  nav .nav-info{display:none}
+}
+.fi{animation:fadeIn .5s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.d1{animation-delay:.07s}.d2{animation-delay:.14s}.d3{animation-delay:.21s}
+
+/* ══ PROGRAM TRACKER ══ */
+.tracker {
+  background: var(--bg1);
+  border: 1px solid var(--bdr);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.tracker::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--a), var(--bl));
+}
+.tracker-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.tracker-title {
+  font-family: var(--fm);
+  font-size: 10px;
+  color: var(--tx3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.tracker-stats {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.ts {
+  text-align: center;
+}
+.ts-val {
+  font-family: var(--fh);
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--a);
+}
+.ts-val.deload { color: var(--or); }
+.ts-val.phase { color: var(--bl); }
+.ts-label {
+  font-family: var(--fm);
+  font-size: 9px;
+  color: var(--tx3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.tracker-bar-wrap {
+  margin-bottom: 12px;
+}
+.tracker-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--fm);
+  font-size: 10px;
+  color: var(--tx2);
+  margin-bottom: 6px;
+}
+.tracker-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.tracker-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--a2), var(--a));
+  transition: width 0.8s ease;
+}
+.tracker-bar-fill.deload-fill {
+  background: linear-gradient(90deg, #cc5500, var(--or));
+}
+.tracker-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 5px 14px;
+  border-radius: 100px;
+}
+.tracker-status.normal {
+  background: var(--adim);
+  border: 1px solid var(--abdr);
+  color: var(--a);
+}
+.tracker-status.deload {
+  background: var(--ordim);
+  border: 1px solid rgba(255,109,58,0.3);
+  color: var(--or);
+}
+.tracker-status.notset {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--bdr2);
+  color: var(--tx2);
+}
+.tracker-set-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.tracker-date-input {
+  background: var(--bg2);
+  border: 1px solid var(--bdr2);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-family: var(--fm);
+  font-size: 12px;
+  color: var(--tx);
+  cursor: pointer;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.tracker-date-input:focus {
+  border-color: var(--abdr);
+}
+.tracker-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  cursor: pointer;
+}
+.tracker-btn {
+  background: var(--adim);
+  border: 1px solid var(--abdr);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-family: var(--fm);
+  font-size: 11px;
+  color: var(--a);
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background 0.2s;
+}
+.tracker-btn:hover { background: rgba(0,240,168,0.15); }
+.tracker-btn.reset {
+  background: rgba(255,77,109,0.07);
+  border-color: rgba(255,77,109,0.25);
+  color: var(--rd);
+}
+.tracker-btn.reset:hover { background: rgba(255,77,109,0.15); }
+.week-dots {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.wd {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--bdr);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fm);
+  font-size: 7px;
+  color: var(--tx3);
+  cursor: default;
+  transition: all 0.15s;
+}
+.wd.done { background: rgba(0,240,168,0.12); border-color: var(--abdr); color: var(--a2); }
+.wd.current { background: var(--a); border-color: var(--a); color: #000; font-weight: 700; }
+.wd.deload-dot { background: rgba(255,109,58,0.15); border-color: rgba(255,109,58,0.35); color: var(--or); }
+.wd.current.deload-dot { background: var(--or); border-color: var(--or); color: #000; }
+.phase-labels {
+  display: flex;
+  gap: 0;
+  margin-top: 6px;
+}
+.pl {
+  flex: 1;
+  font-family: var(--fm);
+  font-size: 8px;
+  color: var(--tx3);
+  text-align: center;
+  letter-spacing: 0.5px;
+  padding: 3px 2px;
+  border-top: 2px solid var(--bdr);
+}
+.pl.active-phase { color: var(--a); border-top-color: var(--a); }
+.pl:nth-child(2).active-phase { color: var(--bl); border-top-color: var(--bl); }
+.pl:nth-child(3).active-phase { color: var(--yw); border-top-color: var(--yw); }
+.pl:nth-child(4).active-phase { color: var(--or); border-top-color: var(--or); }
+
+
+/* ══ PHASE CARDS ══ */
+.phase-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 18px 18px}
+.ph-card{border-radius:10px;padding:18px;border:1px solid}
+.ph-card.p1{border-color:rgba(0,240,168,0.22);background:rgba(0,240,168,0.04)}
+.ph-card.p2{border-color:rgba(255,201,71,0.25);background:rgba(255,201,71,0.04)}
+.ph-card.p3{border-color:rgba(255,77,109,0.22);background:rgba(255,77,109,0.04)}
+.ph-title{font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0.5px;margin-bottom:4px}
+.ph-badge{font-family:var(--fm);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:4px;border:1px solid;margin-bottom:12px;display:inline-block}
+.ph-card.p1 .ph-badge{color:var(--a);border-color:var(--abdr);background:var(--adim)}
+.ph-card.p2 .ph-badge{color:var(--yw);border-color:rgba(255,201,71,0.3);background:var(--ywdim)}
+.ph-card.p3 .ph-badge{color:var(--rd);border-color:rgba(255,77,109,0.25);background:rgba(255,77,109,0.06)}
+.ph-list{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-direction:column;gap:7px}
+.ph-list li{font-size:12.5px;color:var(--tx2);padding-left:14px;position:relative;line-height:1.55}
+.ph-list li::before{content:'›';position:absolute;left:0;color:var(--a)}
+.ph-card.p2 .ph-list li::before{color:var(--yw)}
+.ph-card.p3 .ph-list li::before{color:var(--rd)}
+.ph-bar-wrap{margin-top:4px}
+.ph-bar-label{display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--tx3);margin-bottom:5px;letter-spacing:0.5px}
+.ph-bar{height:5px;background:rgba(255,255,255,0.06);border-radius:100px;overflow:hidden}
+.ph-bar-fill{height:100%;border-radius:100px}
+.ph-card.p1 .ph-bar-fill{background:linear-gradient(90deg,var(--a2),var(--a))}
+.ph-card.p2 .ph-bar-fill{background:linear-gradient(90deg,#d49a00,var(--yw))}
+.ph-card.p3 .ph-bar-fill{background:linear-gradient(90deg,#cc2244,var(--rd))}
+
+/* ══ PROGRESSION TIMELINE ══ */
+.prog-timeline{display:flex;flex-direction:column;gap:8px;padding:14px 18px}
+.pt-item{display:grid;grid-template-columns:90px 1fr;gap:14px;align-items:start;padding:12px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--bdr)}
+.pt-week{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--a);letter-spacing:1px}
+.pt-desc{font-size:12.5px;color:var(--tx2);line-height:1.55}
+.pt-desc strong{color:var(--tx)}
+
+/* ══ ADJUSTMENT RULES ══ */
+.adj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 18px}
+.adj-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:16px}
+.adj-trigger{font-family:var(--fm);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--tx2);margin-bottom:8px}
+.adj-title{font-family:var(--fh);font-size:16px;font-weight:700;margin-bottom:10px}
+.adj-actions{display:flex;flex-direction:column;gap:7px}
+.adj-action{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--tx2);line-height:1.5}
+.adj-num{font-family:var(--fm);font-size:10px;color:var(--a);background:var(--adim);border:1px solid var(--abdr);border-radius:4px;padding:1px 7px;flex-shrink:0;margin-top:1px}
+
+/* ══ MEAL PLAN ══ */
+.meal-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.meal-item{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:var(--bg2);border:1px solid var(--bdr);border-radius:8px}
+.meal-num{font-family:var(--fm);font-size:9px;color:var(--a);background:var(--adim);border:1px solid var(--abdr);border-radius:4px;padding:2px 7px;flex-shrink:0;margin-top:1px;letter-spacing:1px}
+.meal-content{flex:1}
+.meal-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.meal-detail{font-size:11.5px;color:var(--tx2)}
+
+@media(max-width:820px){
+  .phase-strip{grid-template-columns:1fr}
+  .adj-grid{grid-template-columns:1fr}
+  .pt-item{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <div class="nav-logo">APEX<span>.</span></div>
+    <div class="nav-tag">Phase 1 · Active</div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-pre fi">// Elite Training System — Bro Split Evolved</div>
+  <h1 class="hero-h1 fi d1">THE<br><em>SHARP</em><br>BUILD</h1>
+  <p class="hero-p fi d2">One focused muscle group per day. Maximum volume, maximum intensity, maximum results. Each session is engineered around a single target — no dilution, no compromise.</p>
+  <div class="hero-chips fi d3">
+    <span class="chip a">One Muscle / Day</span>
+    <span class="chip a">6-Day Split</span>
+    <span class="chip">Advanced Bro Split</span>
+    <span class="chip">Athletic Conditioning</span>
+    <span class="chip">Aesthetic-Targeted</span>
+  </div>
+</div>
+
+<div class="pw">
+
+  <!-- SPLIT OVERVIEW -->
+  <div class="split-bar fi d3">
+    <div class="sb-item active">
+      <div class="sb-day">Mon</div>
+      <div class="sb-focus">CHEST</div>
+    </div>
+    <div class="sb-item">
+      <div class="sb-day">Tue</div>
+      <div class="sb-focus">BACK</div>
+    </div>
+    <div class="sb-item">
+      <div class="sb-day">Wed</div>
+      <div class="sb-focus">SHOULDERS</div>
+    </div>
+    <div class="sb-item">
+      <div class="sb-day">Thu</div>
+      <div class="sb-focus">ARMS + CORE</div>
+    </div>
+    <div class="sb-item">
+      <div class="sb-day">Fri</div>
+      <div class="sb-focus">LEGS</div>
+    </div>
+    <div class="sb-item cond-day">
+      <div class="sb-day">Sat</div>
+      <div class="sb-focus">ATHLETIC</div>
+    </div>
+    <div class="sb-item rest-day">
+      <div class="sb-day">Sun</div>
+      <div class="sb-focus">REST</div>
+    </div>
+  </div>
+
+
+  <!-- PROGRAM TRACKER -->
+  <div class="tracker" id="programTracker">
+    <div class="tracker-top">
+      <div>
+        <div class="tracker-title">// Program Progress Tracker</div>
+        <div id="trackerStatusBadge" class="tracker-status notset">● Set your start date to begin tracking</div>
+      </div>
+      <div class="tracker-stats">
+        <div class="ts">
+          <div class="ts-val" id="tsWeek">—</div>
+          <div class="ts-label">Current Week</div>
+        </div>
+        <div class="ts">
+          <div class="ts-val phase" id="tsPhase">—</div>
+          <div class="ts-label">Phase</div>
+        </div>
+        <div class="ts">
+          <div class="ts-val" id="tsDaysLeft">—</div>
+          <div class="ts-label">Days Left in Phase</div>
+        </div>
+        <div class="ts">
+          <div class="ts-val" id="tsTotal">—</div>
+          <div class="ts-label">Days Into Program</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tracker-bar-wrap" id="trackerBarWrap" style="display:none">
+      <div class="tracker-bar-label">
+        <span id="trackerBarLabel">Program Progress</span>
+        <span id="trackerBarPct"></span>
+      </div>
+      <div class="tracker-bar">
+        <div class="tracker-bar-fill" id="trackerBarFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="week-dots" id="weekDots"></div>
+    <div class="phase-labels" id="phaseLabels"></div>
+
+    <div class="tracker-set-area" style="margin-top:14px">
+      <div style="font-family:var(--fm);font-size:10px;color:var(--tx2);letter-spacing:0.5px">Start Date:</div>
+      <input type="date" class="tracker-date-input" id="startDateInput">
+      <button class="tracker-btn" onclick="setStartDate()">Set Date</button>
+      <button class="tracker-btn reset" id="resetBtn" onclick="resetStartDate()" style="display:none">Reset</button>
+    </div>
+  </div>
+
+  <!-- CARDIO ENGINE -->
+  <div class="col-sec">
+    <div class="col-hdr open" onclick="tog(this)">
+      <span class="col-icon">🧭</span>
+      <span class="col-title">CARDIO DECISION ENGINE — Read This First</span>
+      <span class="col-meta">Which · When · Why · Override Rules</span>
+      <span class="col-arr">▼</span>
+    </div>
+    <div class="col-body open">
+      <div class="cde">
+        <div class="cde-intro">Three types of cardio in this program. <strong>Not interchangeable.</strong> Each has a specific physiological role assigned to specific days based on CNS stress, recovery runway, and training goal. Follow the table — it solves the sequencing problem for you.</div>
+        <div class="cde-type-grid">
+          <div class="cde-type liss">
+            <div class="cde-tl">Tier 1 · Foundation</div>
+            <div class="cde-tn">LISS</div>
+            <div class="cde-td"><strong>Zone 2 · HR 120–140.</strong> Burns fat as primary fuel. Builds mitochondrial density. Recovers the body rather than stressing it. 30–40 min incline walk, bike, or rowing. Restorative — can run adjacent to any lifting session.</div>
+          </div>
+          <div class="cde-type hiit">
+            <div class="cde-tl">Tier 2 · Metabolic</div>
+            <div class="cde-tn">HIIT</div>
+            <div class="cde-td"><strong>Zone 4–5 · All-out effort.</strong> Creates EPOC — elevated metabolism 12–24 hrs post-session. Max 20 min. Assault bike or sprints. Limited to 1 true session per week at this training volume — more is counterproductive.</div>
+          </div>
+          <div class="cde-type ath">
+            <div class="cde-tl">Tier 3 · Athletic</div>
+            <div class="cde-tn">ATHLETIC</div>
+            <div class="cde-td"><strong>Full-body functional conditioning.</strong> Saturday only — sleds, carries, jumps, sprints, circuits. This is what separates a gym physique from an athletic physique. Not replaceable by extra cardio.</div>
+          </div>
+        </div>
+
+        <div style="font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0.5px;margin-bottom:10px">Day-by-Day Assignment</div>
+        <table class="dtbl">
+          <thead><tr><th>Day</th><th>Muscle Focus</th><th>Cardio</th><th>Timing</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Mon</strong></td><td>Chest</td><td><span class="ct-none">None</span></td><td>—</td><td>First session of the week — full energy for chest. No cardio interference.</td></tr>
+            <tr><td><strong>Tue</strong></td><td>Back</td><td><span class="ct-liss">LISS 30 min</span></td><td>Morning fasted, 4h+ before lifting</td><td>Morning LISS clears Monday fatigue. Back is lower CNS load — LISS does not impair it.</td></tr>
+            <tr><td><strong>Wed</strong></td><td>Shoulders</td><td><span class="ct-liss">LISS 30 min</span></td><td>Morning fasted, 4h+ before lifting</td><td>Midweek aerobic maintenance. Shoulder session has no conflict with morning Zone 2.</td></tr>
+            <tr><td><strong>Thu</strong></td><td>Arms + Core</td><td><span class="ct-none">None</span></td><td>—</td><td>Arms are CNS-light but deserve full focus. No cardio fatigue — maximize the pump.</td></tr>
+            <tr><td><strong>Fri</strong></td><td>Legs</td><td><span class="ct-liss">LISS 25 min</span></td><td>Post-lifting cool-down walk only</td><td>Short post-leg walk drops cortisol and improves recovery heading into Saturday.</td></tr>
+            <tr><td><strong>Sat</strong></td><td>Athletic Full-Body</td><td><span class="ct-hiit">HIIT built-in</span></td><td>Within the session</td><td>Saturday IS the HIIT. Sprint intervals embedded in the athletic session. No additional cardio.</td></tr>
+            <tr><td><strong>Sun</strong></td><td>Full Rest</td><td><span class="ct-liss">Walk 20–30 min</span></td><td>Outdoors, no HR target</td><td>Active recovery. Not training — parasympathetic restoration, sunlight, decompression.</td></tr>
+          </tbody>
+        </table>
+
+        <div style="font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0.5px;margin-bottom:10px">Override Rules</div>
+        <table class="dtbl" style="margin-bottom:14px">
+          <thead><tr><th>Situation</th><th>What to Do</th></tr></thead>
+          <tbody>
+            <tr><td>HRV 10%+ below 7-day average</td><td>Cancel HIIT. Replace with 20 min LISS or skip entirely.</td></tr>
+            <tr><td>Sleep under 6.5 hrs last night</td><td>Drop any HIIT to LISS. CNS compromised = zero adaptation from high intensity.</td></tr>
+            <tr><td>Joints aching / persistent soreness</td><td>LISS only that day. Joints lag behind muscular recovery — don't push through.</td></tr>
+            <tr><td>Want to accelerate fat loss</td><td>Add 1 optional LISS (20–30 min). Never add more HIIT — cortisol rises, muscle falls.</td></tr>
+            <tr><td>Deload week (every 4th week)</td><td>LISS only. All HIIT and Saturday conditioning removed. Max 3 × 30 min Zone 2.</td></tr>
+          </tbody>
+        </table>
+        <div class="warn-strip"><strong>Rule:</strong> 1 true HIIT session per week maximum at this volume. More HIIT = more cortisol = suppressed testosterone = stalled results. Saturday's session is it.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-label">// Select Your Day</div>
+
+  <div class="week-sel">
+    <div class="day-btn active" onclick="selDay(0,this)"><div class="db-dn">Mon</div><div class="db-dl">CHEST</div><div class="db-sub">No Cardio</div></div>
+    <div class="day-btn" onclick="selDay(1,this)"><div class="db-dn">Tue</div><div class="db-dl">BACK</div><div class="db-sub">LISS AM</div></div>
+    <div class="day-btn" onclick="selDay(2,this)"><div class="db-dn">Wed</div><div class="db-dl">SHOULDERS</div><div class="db-sub">LISS AM</div></div>
+    <div class="day-btn" onclick="selDay(3,this)"><div class="db-dn">Thu</div><div class="db-dl">ARMS+CORE</div><div class="db-sub">No Cardio</div></div>
+    <div class="day-btn" onclick="selDay(4,this)"><div class="db-dn">Fri</div><div class="db-dl">LEGS</div><div class="db-sub">LISS Post</div></div>
+    <div class="day-btn cond" onclick="selDay(5,this)"><div class="db-dn">Sat</div><div class="db-dl">ATHLETIC</div><div class="db-sub">HIIT Built-In</div></div>
+    <div class="day-btn rest" onclick="selDay(6,this)"><div class="db-dn">Sun</div><div class="db-dl">REST</div><div class="db-sub">Walk + Mobility</div></div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       DAY 0 — MONDAY — CHEST
+  ═══════════════════════════════ -->
+  <div class="day-panel active" id="dp-0">
+    <div class="day-top">
+      <div class="day-top-inner">
+        <div class="day-num-big">01</div>
+        <div class="day-meta">
+          <div class="day-dow">Monday</div>
+          <div class="day-name">CHEST DAY</div>
+          <div class="day-sub">Full chest focus — upper, mid, lower, serratus. Nothing else.</div>
+          <div class="day-bdgs"><span class="bdg str">Chest</span><span class="bdg str">Hypertrophy</span><span class="bdg core">No Cardio</span></div>
+        </div>
+        <div class="day-time"><div class="dt-val" style="color:var(--a)">~65</div><div class="dt-lbl">Min Total</div></div>
+      </div>
+      <div class="day-tl">
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--a);opacity:0.4"></div><div class="tl-lbl">Warm-Up 10m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--a)"></div><div class="tl-lbl">Chest 55m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--bg3)"></div><div class="tl-lbl">No Cardio</div></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--a)"></div>
+        <div class="blk-title">CHEST SESSION</div>
+        <div class="blk-meta">6 exercises · ~55 min · Upper → Mid → Lower → Serratus</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="ex-wrap">
+          <table class="ex-tbl">
+            <thead><tr><th style="width:40%">Exercise + Muscles Worked</th><th>Sets</th><th>Reps</th><th>Rest</th><th>RPE</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Incline Barbell Press</div>
+                  <div class="muscle-tags"><span class="mt chest">Upper Chest ★★</span><span class="mt shoulder">Front Delt</span><span class="mt tricep">Triceps</span></div>
+                  <div class="ex-note">3-sec eccentric every rep. The primary upper chest builder — sets the shelf that creates visual thickness from the collarbone down.</div>
+                  <a href="https://www.youtube.com/results?search_query=incline+barbell+bench+press+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">6–8</td><td class="td-rest">3 min</td><td><span class="rpe h">RPE 8–9</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Flat DB Press (Slow Eccentric)</div>
+                  <div class="muscle-tags"><span class="mt chest">Mid Chest ★★</span><span class="mt serratus">Serratus Anterior</span><span class="mt shoulder">Front Delt</span><span class="mt tricep">Triceps</span></div>
+                  <div class="ex-note">4-sec down. Full stretch at the bottom. At full extension, actively push the DBs together — serratus fires hard and creates the rib-cage detail alongside the pec.</div>
+                  <a href="https://www.youtube.com/results?search_query=flat+dumbbell+press+slow+eccentric+form" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">8–10</td><td class="td-rest">90 sec</td><td><span class="rpe m">RPE 7–8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Cable Fly (Low-to-High)</div>
+                  <div class="muscle-tags"><span class="mt chest">Upper Chest ★★</span><span class="mt serratus">Serratus</span><span class="mt shoulder">Front Delt</span></div>
+                  <div class="ex-note">Cables set at the lowest position. Arc up and together. Constant tension through the full ROM — something a dumbbell fly cannot do. Squeeze hard at the top.</div>
+                  <a href="https://www.youtube.com/results?search_query=cable+fly+low+to+high+upper+chest+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">12–15</td><td class="td-rest">75 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Decline DB Press</div>
+                  <div class="muscle-tags"><span class="mt chest">Lower Chest ★★</span><span class="mt tricep">Triceps</span><span class="mt shoulder">Front Delt</span></div>
+                  <div class="ex-note">Lower chest defines the pec line — the sharp separation between chest and abs. Often skipped, always noticeable when it's missing. Full ROM, controlled descent.</div>
+                  <a href="https://www.youtube.com/results?search_query=decline+dumbbell+press+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">10–12</td><td class="td-rest">75 sec</td><td><span class="rpe m">RPE 7–8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Serratus Crunch (Cable, Standing)</div>
+                  <div class="muscle-tags"><span class="mt serratus">Serratus Anterior ★★</span><span class="mt core">Upper Abs</span><span class="mt back">Lats (stretch)</span></div>
+                  <div class="ex-note">Arms overhead on a high cable, crunch forward rounding the upper back fully. Protracts the scapula at the end range. The "finger" muscle lines alongside the ribs — most programs never train this. Most physiques show it.</div>
+                  <a href="https://www.youtube.com/results?search_query=serratus+anterior+cable+crunch+exercise+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">15–20</td><td class="td-rest">60 sec</td><td><span class="rpe l">RPE 6–7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Push-Up Burnout (Wide Grip)</div>
+                  <div class="muscle-tags"><span class="mt chest">Full Chest ★</span><span class="mt serratus">Serratus ★</span><span class="mt tricep">Triceps</span></div>
+                  <div class="ex-note">Max reps, bodyweight only. At the top of every rep, push the floor away and round the upper back — this maximally activates the serratus at fatigue. Not a rest exercise.</div>
+                  <a href="https://www.youtube.com/results?search_query=wide+grip+push+up+serratus+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">2</td><td class="td-reps">Max</td><td class="td-rest">60 sec</td><td><span class="rpe h">Max effort</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="finisher"><div class="fin-lbl">⚡ Finisher</div><div class="fin-txt">Cable Fly drop set — start at your working weight, do 12 reps, drop 20%, do 10 reps, drop 20%, do max reps. No rest between drops. This is the last thing your chest feels today.</div></div>
+        <div class="cn"><strong>Coach:</strong> Before pressing, 2 sets of band pull-aparts + 2 sets of light cable external rotation. 4 minutes — non-negotiable shoulder health. Upper chest is the visual centrepiece of this physique. Make Monday count.</div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--tx3)"></div>
+        <div class="blk-title">CARDIO TODAY</div>
+        <div class="blk-meta">None — preserve full energy for chest</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body">
+        <div class="cardio-blk">
+          <div class="ca none">
+            <div class="ca-tl">No Cardio</div>
+            <div class="ca-name">REST FROM CARDIO</div>
+            <div class="ca-desc">Monday opens the week fresh. Full glycogen, full CNS drive. Chest responds best to maximum mechanical tension — adding cardio before or after dilutes the stimulus. Fat loss is managed by the weekly caloric structure, not Monday cardio.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       DAY 1 — TUESDAY — BACK
+  ═══════════════════════════════ -->
+  <div class="day-panel" id="dp-1">
+    <div class="day-top">
+      <div class="day-top-inner">
+        <div class="day-num-big">02</div>
+        <div class="day-meta">
+          <div class="day-dow">Tuesday</div>
+          <div class="day-name">BACK DAY</div>
+          <div class="day-sub">Full back focus — lats, mid-traps, rhomboids, rear delts, spinal erectors. V-taper priority.</div>
+          <div class="day-bdgs"><span class="bdg str">Back</span><span class="bdg str">Hypertrophy</span><span class="bdg rec">LISS Morning</span></div>
+        </div>
+        <div class="day-time"><div class="dt-val" style="color:var(--a)">~90</div><div class="dt-lbl">Min Total</div></div>
+      </div>
+      <div class="day-tl">
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--bl)"></div><div class="tl-lbl">LISS 30m (AM)</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--bg3)"></div><div class="tl-lbl">Gap 4h+</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--a)"></div><div class="tl-lbl">Back 60m (PM)</div></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--bl)"></div>
+        <div class="blk-title">CARDIO FIRST — LISS (Morning)</div>
+        <div class="blk-meta">Zone 2 · 30 min · Fasted · 4h+ before lifting</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="cardio-blk">
+          <div class="ca liss">
+            <div class="ca-tl">Tier 1 · LISS</div>
+            <div class="ca-name">LOW INTENSITY STEADY STATE</div>
+            <div class="ca-pills"><span class="ca-pill">30 min</span><span class="ca-pill">HR 120–140 bpm</span><span class="ca-pill">Zone 2</span><span class="ca-pill">Fasted AM</span></div>
+            <div class="ca-desc">Incline treadmill walk, outdoor walk, or stationary bike at conversational pace. You must be able to speak full sentences throughout. If breathing becomes labored, drop intensity immediately.</div>
+            <div class="ca-proto"><strong>Protocol:</strong> 5 min flat warm-up → 20 min at target HR → 5 min cool-down.<br><strong>Nutrition:</strong> 10g EAAs or BCAAs if fasted. Coffee 30 min before is fine.<br><strong>Gap:</strong> Minimum 4 hours between LISS and your lifting session.</div>
+            <div class="ca-why"><strong>Why LISS here:</strong> Clears Monday's metabolic byproducts from muscle tissue. Increases blood flow without taxing the CNS. Burns fat as primary fuel. Restorative — not stressful. It makes the afternoon back session better, not worse.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--a)"></div>
+        <div class="blk-title">BACK SESSION</div>
+        <div class="blk-meta">6 exercises · ~60 min · Width → Thickness → Detail</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="ex-wrap">
+          <table class="ex-tbl">
+            <thead><tr><th style="width:40%">Exercise + Muscles Worked</th><th>Sets</th><th>Reps</th><th>Rest</th><th>RPE</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Weighted Pull-Up</div>
+                  <div class="muscle-tags"><span class="mt back">Lats ★★</span><span class="mt back">Teres Major ★</span><span class="mt bicep">Biceps</span><span class="mt rear-delt">Rear Delt</span></div>
+                  <div class="ex-note">Full dead hang at the bottom — non-negotiable. Chin clears the bar at the top. Add weight via belt. This is the single best exercise for lat width and V-taper.</div>
+                  <a href="https://www.youtube.com/results?search_query=weighted+pull+up+proper+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">5–7</td><td class="td-rest">3 min</td><td><span class="rpe h">RPE 8–9</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Pendlay Row</div>
+                  <div class="muscle-tags"><span class="mt back">Mid Traps ★★</span><span class="mt back">Rhomboids ★★</span><span class="mt back">Lats</span><span class="mt rear-delt">Rear Delt</span><span class="mt bicep">Biceps</span></div>
+                  <div class="ex-note">Dead-stop each rep from the floor. Back horizontal. Explosive pull, controlled return. This is a power movement — it builds the mid-back thickness that makes a back look dense and complete.</div>
+                  <a href="https://www.youtube.com/results?search_query=pendlay+row+proper+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">5–6</td><td class="td-rest">2.5 min</td><td><span class="rpe h">RPE 8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Single-Arm Cable Row (Low Pulley)</div>
+                  <div class="muscle-tags"><span class="mt back">Lats ★★</span><span class="mt back">Mid Trap</span><span class="mt rear-delt">Rear Delt</span><span class="mt bicep">Biceps</span></div>
+                  <div class="ex-note">Allow full rotation at the bottom — stretch the lat completely. Drive the elbow back and up. Single arm allows range of motion that barbell rows cannot reach.</div>
+                  <a href="https://www.youtube.com/results?search_query=single+arm+cable+row+low+pulley+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">10–12 each</td><td class="td-rest">75 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Wide-Grip Lat Pulldown</div>
+                  <div class="muscle-tags"><span class="mt back">Lats ★★</span><span class="mt back">Teres Major</span><span class="mt bicep">Biceps</span><span class="mt rear-delt">Rear Delt</span></div>
+                  <div class="ex-note">Slight lean back. Drive elbows down and back toward your hips — not just pulling the bar down. Full stretch at the top, full contraction at the bottom.</div>
+                  <a href="https://www.youtube.com/results?search_query=wide+grip+lat+pulldown+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">10–12</td><td class="td-rest">75 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Face Pull (Rope, High Cable)</div>
+                  <div class="muscle-tags"><span class="mt rear-delt">Rear Delt ★★</span><span class="mt back">Rotator Cuff ★★</span><span class="mt trap">Mid Trap</span><span class="mt back">Rhomboids</span></div>
+                  <div class="ex-note">External rotation at the end range — elbows flare out and hands finish beside your ears. This is both a rear delt builder and a rotator cuff health exercise. Non-negotiable for a heavy pressing program.</div>
+                  <a href="https://www.youtube.com/results?search_query=cable+face+pull+rope+external+rotation+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">15–20</td><td class="td-rest">45 sec</td><td><span class="rpe l">RPE 6</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Cable Straight-Arm Pulldown</div>
+                  <div class="muscle-tags"><span class="mt back">Lats ★★</span><span class="mt back">Teres Major</span><span class="mt serratus">Serratus Anterior</span></div>
+                  <div class="ex-note">Arms stay completely straight throughout. This is a lat isolation exercise — no bicep involvement. Creates the lower lat sweep that fills out the V-taper from behind.</div>
+                  <a href="https://www.youtube.com/results?search_query=cable+straight+arm+pulldown+lat+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">12–15</td><td class="td-rest">60 sec</td><td><span class="rpe l">RPE 6–7</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="finisher"><div class="fin-lbl">⚡ Finisher</div><div class="fin-txt">Farmer's Carry — 4 × 40 yards heavy. Grip, traps, spinal erectors, core integration. Walk fast and tall. This builds the structural thickness that holds the physique together.</div></div>
+        <div class="cn"><strong>Coach:</strong> Back training sequence matters — width first (pull-ups, pulldowns), then thickness (rows), then isolation (pulldown, face pulls). Never do it in reverse. Face pulls are not optional — they protect the shoulder joint you press with on Monday and Wednesday.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       DAY 2 — WEDNESDAY — SHOULDERS
+  ═══════════════════════════════ -->
+  <div class="day-panel" id="dp-2">
+    <div class="day-top">
+      <div class="day-top-inner">
+        <div class="day-num-big">03</div>
+        <div class="day-meta">
+          <div class="day-dow">Wednesday</div>
+          <div class="day-name">SHOULDER DAY</div>
+          <div class="day-sub">Full shoulder focus — lateral delts first, then front, then rear. Caps, width, 3D shape.</div>
+          <div class="day-bdgs"><span class="bdg str">Shoulders</span><span class="bdg str">Hypertrophy</span><span class="bdg rec">LISS Morning</span></div>
+        </div>
+        <div class="day-time"><div class="dt-val" style="color:var(--a)">~90</div><div class="dt-lbl">Min Total</div></div>
+      </div>
+      <div class="day-tl">
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--bl)"></div><div class="tl-lbl">LISS 30m (AM)</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--bg3)"></div><div class="tl-lbl">Gap 4h+</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--a)"></div><div class="tl-lbl">Shoulders 60m (PM)</div></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--bl)"></div>
+        <div class="blk-title">CARDIO FIRST — LISS (Morning)</div>
+        <div class="blk-meta">Zone 2 · 30 min · Fasted · 4h+ before lifting</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="cardio-blk">
+          <div class="ca liss">
+            <div class="ca-tl">Tier 1 · LISS</div>
+            <div class="ca-name">LOW INTENSITY STEADY STATE</div>
+            <div class="ca-pills"><span class="ca-pill">30 min</span><span class="ca-pill">HR 120–140 bpm</span><span class="ca-pill">Zone 2</span><span class="ca-pill">Fasted AM</span></div>
+            <div class="ca-desc">Same protocol as Tuesday. Incline walk, outdoor walk, or bike. Midweek aerobic maintenance — keeps the fat-burning engine running without creating fatigue that affects the afternoon session.</div>
+            <div class="ca-proto"><strong>Protocol:</strong> 5 min warm-up → 20 min Zone 2 → 5 min cool-down. BCAAs or EAAs if fasted. Minimum 4 hours before lifting.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--a)"></div>
+        <div class="blk-title">SHOULDER SESSION</div>
+        <div class="blk-meta">6 exercises · ~60 min · Lateral delts first — always</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="ex-wrap">
+          <table class="ex-tbl">
+            <thead><tr><th style="width:40%">Exercise + Muscles Worked</th><th>Sets</th><th>Reps</th><th>Rest</th><th>RPE</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Cable Lateral Raise</div>
+                  <div class="muscle-tags"><span class="mt shoulder">Lateral Delt ★★</span><span class="mt trap">Upper Trap</span></div>
+                  <div class="ex-note">Done FIRST while completely fresh — this is intentional. Lateral delts are the single most important muscle for shoulder width and the capped look. Cable provides constant tension that dumbbells lose at the bottom. Last set: 3-drop mechanical drop set.</div>
+                  <a href="https://www.youtube.com/results?search_query=cable+lateral+raise+proper+form+tutorial+shoulders" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">5</td><td class="td-reps">12–15</td><td class="td-rest">60 sec</td><td><span class="rpe m">RPE 7–8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Standing Barbell OHP (Strict)</div>
+                  <div class="muscle-tags"><span class="mt shoulder">Front Delt ★★</span><span class="mt shoulder">Lateral Delt ★</span><span class="mt tricep">Triceps</span><span class="mt trap">Upper Trap</span></div>
+                  <div class="ex-note">No leg drive. Core braced. Full overhead lockout. This is your primary shoulder strength indicator — track this lift. It is placed after lateral raises so the lateral head has already been pre-fatigued, ensuring the front delt doesn't dominate.</div>
+                  <a href="https://www.youtube.com/results?search_query=standing+barbell+overhead+press+strict+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">6–8</td><td class="td-rest">3 min</td><td><span class="rpe h">RPE 8–9</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Arnold Press (Seated DB)</div>
+                  <div class="muscle-tags"><span class="mt shoulder">All Three Delt Heads ★</span><span class="mt tricep">Triceps</span><span class="mt trap">Upper Trap</span></div>
+                  <div class="ex-note">Full rotation from neutral grip at the bottom to pronated at the top. Hits all three delt heads in a single movement. Controlled descent — the rotation on the way down is where most of the muscle damage occurs.</div>
+                  <a href="https://www.youtube.com/results?search_query=arnold+press+seated+dumbbell+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">10–12</td><td class="td-rest">90 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">DB Lateral Raise (Strict, Slow)</div>
+                  <div class="muscle-tags"><span class="mt shoulder">Lateral Delt ★★</span><span class="mt trap">Upper Trap</span></div>
+                  <div class="ex-note">Second lateral delt hit — volume is the key to capped shoulders. Strict form only: slight forward lean, lead with the elbow, stop at shoulder height. Slow on the way down. Drop set on the final set.</div>
+                  <a href="https://www.youtube.com/results?search_query=dumbbell+lateral+raise+strict+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">12–15</td><td class="td-rest">60 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Face Pull (Rope, High Cable)</div>
+                  <div class="muscle-tags"><span class="mt rear-delt">Rear Delt ★★</span><span class="mt back">Rotator Cuff ★★</span><span class="mt trap">Mid Trap</span></div>
+                  <div class="ex-note">Second face pull session of the week. Rear delt volume is what gives shoulders a 3D look from every angle — not just from the front. External rotation component is rotator cuff health insurance at this age.</div>
+                  <a href="https://www.youtube.com/results?search_query=face+pull+rope+cable+external+rotation+shoulder+health" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">15–20</td><td class="td-rest">45 sec</td><td><span class="rpe l">RPE 6</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Reverse Pec Deck (Rear Delt Fly)</div>
+                  <div class="muscle-tags"><span class="mt rear-delt">Rear Delt ★★</span><span class="mt back">Rhomboids</span><span class="mt trap">Mid Trap</span></div>
+                  <div class="ex-note">Elbows slightly bent and locked — they don't change angle during the movement. Lead with the elbows, not the hands. Rear delts are a stubborn muscle that require direct, isolated volume to develop.</div>
+                  <a href="https://www.youtube.com/results?search_query=reverse+pec+deck+rear+delt+fly+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">15–20</td><td class="td-rest">60 sec</td><td><span class="rpe l">RPE 6–7</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="finisher"><div class="fin-lbl">⚡ Finisher</div><div class="fin-txt">Lateral raise burnout — 2 sets with a light weight (5–8 kg), slow and controlled to absolute failure. The shoulder caps that create the Zac Efron silhouette are built here. Make them burn completely.</div></div>
+        <div class="cn"><strong>Coach:</strong> Lateral delts first — always on shoulder day. Most people press first and the front delt takes over everything. This program prioritizes the muscle that actually creates the wide, capped look. Front delts get enough work from Monday's chest session anyway.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       DAY 3 — THURSDAY — ARMS + CORE
+  ═══════════════════════════════ -->
+  <div class="day-panel" id="dp-3">
+    <div class="day-top">
+      <div class="day-top-inner">
+        <div class="day-num-big">04</div>
+        <div class="day-meta">
+          <div class="day-dow">Thursday</div>
+          <div class="day-name">ARMS + CORE</div>
+          <div class="day-sub">Biceps · Triceps · Forearms · Complete core system. Full focus on the detail muscles.</div>
+          <div class="day-bdgs"><span class="bdg str">Biceps</span><span class="bdg str">Triceps</span><span class="bdg core">Core</span><span class="bdg core">No Cardio</span></div>
+        </div>
+        <div class="day-time"><div class="dt-val" style="color:var(--a)">~70</div><div class="dt-lbl">Min Total</div></div>
+      </div>
+      <div class="day-tl">
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--a);opacity:0.4"></div><div class="tl-lbl">Warm-Up 5m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--a)"></div><div class="tl-lbl">Arms 45m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--yw)"></div><div class="tl-lbl">Core 20m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--bg3)"></div><div class="tl-lbl">No Cardio</div></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--a)"></div>
+        <div class="blk-title">ARMS SESSION — BICEPS + TRICEPS</div>
+        <div class="blk-meta">6 exercises · ~45 min · Alternating bicep / tricep</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="ex-wrap">
+          <table class="ex-tbl">
+            <thead><tr><th style="width:40%">Exercise + Muscles Worked</th><th>Sets</th><th>Reps</th><th>Rest</th><th>RPE</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Close-Grip Bench Press</div>
+                  <div class="muscle-tags"><span class="mt tricep">Triceps — All Heads ★★</span><span class="mt chest">Inner Chest</span><span class="mt shoulder">Front Delt</span></div>
+                  <div class="ex-note">Heaviest tricep movement. Hands shoulder-width — not too narrow or wrists suffer. Lower the bar to the lower chest. This is a strength exercise, not an isolation exercise.</div>
+                  <a href="https://www.youtube.com/results?search_query=close+grip+bench+press+triceps+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">6–8</td><td class="td-rest">2.5 min</td><td><span class="rpe h">RPE 8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Incline DB Curl</div>
+                  <div class="muscle-tags"><span class="mt bicep">Bicep Long Head ★★</span><span class="mt bicep">Bicep Short Head</span><span class="mt forearm">Brachialis</span></div>
+                  <div class="ex-note">The incline position stretches the long head beyond what standing curls allow — this is what builds the bicep peak. Full hang at the bottom, full squeeze at the top. No swinging.</div>
+                  <a href="https://www.youtube.com/results?search_query=incline+dumbbell+curl+bicep+peak+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">8–10</td><td class="td-rest">90 sec</td><td><span class="rpe m">RPE 7–8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Skull Crusher (EZ Bar)</div>
+                  <div class="muscle-tags"><span class="mt tricep">Long Head ★★</span><span class="mt tricep">Medial Head</span><span class="mt tricep">Lateral Head</span></div>
+                  <div class="ex-note">Slow descent to the forehead. The stretch on the long head at the bottom is where most of the growth stimulus comes from. The long head is the largest portion of the tricep — train it through full stretch.</div>
+                  <a href="https://www.youtube.com/results?search_query=skull+crusher+EZ+bar+tricep+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">10–12</td><td class="td-rest">75 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Hammer Curl (DB)</div>
+                  <div class="muscle-tags"><span class="mt forearm">Brachialis ★★</span><span class="mt bicep">Bicep Long Head</span><span class="mt forearm">Brachioradialis</span></div>
+                  <div class="ex-note">Neutral grip (thumbs up). This targets the brachialis — the muscle under the bicep that pushes it upward when developed. Creates arm thickness and the visual separation between bicep and forearm.</div>
+                  <a href="https://www.youtube.com/results?search_query=hammer+curl+dumbbell+brachialis+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">10–12</td><td class="td-rest">60 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Cable Overhead Tricep Extension</div>
+                  <div class="muscle-tags"><span class="mt tricep">Long Head ★★</span><span class="mt tricep">Medial Head</span></div>
+                  <div class="ex-note">Cable behind the head, pull apart with both hands. The overhead position creates maximum long head stretch — the same logic as the skull crusher. Controlled descent, full extension at the top.</div>
+                  <a href="https://www.youtube.com/results?search_query=cable+overhead+tricep+extension+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">12–15</td><td class="td-rest">60 sec</td><td><span class="rpe l">RPE 6–7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Cable Curl (Straight Bar) — 21s</div>
+                  <div class="muscle-tags"><span class="mt bicep">Full Bicep ★★</span><span class="mt bicep">Brachialis</span><span class="mt forearm">Forearm Flexors</span></div>
+                  <div class="ex-note">21s: 7 reps lower half (bottom to 90°) + 7 reps upper half (90° to top) + 7 full ROM = 1 set. Hits every portion of the strength curve. Do 2 rounds. Best blood pump finisher in existence for biceps.</div>
+                  <a href="https://www.youtube.com/results?search_query=bicep+curl+21s+technique+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">2</td><td class="td-reps">21 (7+7+7)</td><td class="td-rest">90 sec</td><td><span class="rpe m">RPE 7–8</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="finisher"><div class="fin-lbl">⚡ Finisher</div><div class="fin-txt">Rope Pushdown strip set — max reps at working weight, strip 25%, max reps, strip 25%, max reps. No rest between strips. Total tricep exhaustion to finish the session.</div></div>
+        <div class="cn"><strong>Coach:</strong> Alternate bicep and tricep exercises throughout — this is the optimal approach for arms. Triceps get the blood pump while biceps recover and vice versa. You can train harder with less rest using this method than going straight through one muscle.</div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--yw)"></div>
+        <div class="blk-title">CORE SYSTEM</div>
+        <div class="blk-meta">3 planes · ~20 min · Post-arms</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="core-inner">
+          <div class="core-section-title">BLOCK 1 — FLEXION (Rectus Abdominis / Lower Abs)</div>
+          <div class="core-row">
+            <div>
+              <div class="core-nm">Hanging Leg Raise (Straight Leg)</div>
+              <div class="muscle-tags"><span class="mt core">Lower Abs ★★</span><span class="mt core">Hip Flexors</span><span class="mt serratus">Serratus</span></div>
+              <div class="core-note">Full dead hang at the start of each rep. Control the descent — do not swing. Lower abs are the priority for visible definition at the belt line.</div>
+              <a href="https://www.youtube.com/results?search_query=hanging+leg+raise+straight+leg+form+tutorial+abs" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+            </div>
+            <div class="core-rx">4 × 12–15</div>
+          </div>
+          <div class="core-row">
+            <div>
+              <div class="core-nm">Ab Wheel Rollout</div>
+              <div class="muscle-tags"><span class="mt core">Full Rectus ★★</span><span class="mt back">Lats</span><span class="mt serratus">Serratus</span></div>
+              <div class="core-note">Full extension only if the lower back stays neutral. The serratus activation adds visible rib-cage detail. This is a full anterior chain exercise, not just an abs exercise.</div>
+              <a href="https://www.youtube.com/results?search_query=ab+wheel+rollout+proper+form+tutorial+core" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+            </div>
+            <div class="core-rx">3 × 10–12</div>
+          </div>
+
+          <div class="core-section-title" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--bdr)">BLOCK 2 — ANTI-ROTATION (TVA / Obliques / Deep Core)</div>
+          <div class="core-row">
+            <div>
+              <div class="core-nm">Pallof Press (Cable)</div>
+              <div class="muscle-tags"><span class="mt core">TVA ★★</span><span class="mt core">Obliques ★</span><span class="mt core">Deep Core</span></div>
+              <div class="core-note">The most functional core exercise. Resisting rotation builds the internal bracing that protects the spine and creates the tight, compact midsection — not just ab visibility.</div>
+              <a href="https://www.youtube.com/results?search_query=pallof+press+cable+anti+rotation+core+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+            </div>
+            <div class="core-rx">3 × 12 each</div>
+          </div>
+          <div class="core-row">
+            <div>
+              <div class="core-nm">Dead Bug (Slow, Controlled)</div>
+              <div class="muscle-tags"><span class="mt core">TVA ★★</span><span class="mt core">Lower Abs</span><span class="mt back">Spinal Erectors</span></div>
+              <div class="core-note">Lower back pinned to the floor throughout — if it lifts, the movement stops. Simultaneously trains anti-extension and anti-rotation. Excellent for long-term spinal health at this training age.</div>
+              <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+proper+form+tutorial+core" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+            </div>
+            <div class="core-rx">3 × 8 each side</div>
+          </div>
+
+          <div class="core-section-title" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--bdr)">BLOCK 3 — ROTATION (Obliques / Athletic Core)</div>
+          <div class="core-row">
+            <div>
+              <div class="core-nm">Cable Woodchop (High-to-Low)</div>
+              <div class="muscle-tags"><span class="mt core">External Oblique ★★</span><span class="mt core">Internal Oblique ★</span><span class="mt shoulder">Shoulder</span></div>
+              <div class="core-note">Rotate through the thoracic spine — not just swing the arms. This creates the diagonal oblique lines that are visible at 10–12% body fat. Drive from the hips and core, not the arms.</div>
+              <a href="https://www.youtube.com/results?search_query=cable+woodchop+high+to+low+oblique+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+            </div>
+            <div class="core-rx">3 × 12–15 each</div>
+          </div>
+          <div class="core-row">
+            <div>
+              <div class="core-nm">Copenhagen Plank</div>
+              <div class="muscle-tags"><span class="mt core">Obliques ★★</span><span class="mt quad">Adductors ★★</span><span class="mt core">Hip Stabilizers</span></div>
+              <div class="core-note">Side plank with the top foot elevated on a bench. Adductor + lateral core integration. Creates a complete midsection — not just front abs. Often overlooked and almost always a weak point.</div>
+              <a href="https://www.youtube.com/results?search_query=copenhagen+plank+adductor+core+exercise+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+            </div>
+            <div class="core-rx">3 × 25–30 sec each</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--tx3)"></div>
+        <div class="blk-title">CARDIO TODAY</div>
+        <div class="blk-meta">None — arms and core need full focus</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body">
+        <div class="cardio-blk">
+          <div class="ca none">
+            <div class="ca-tl">No Cardio</div>
+            <div class="ca-name">REST FROM CARDIO</div>
+            <div class="ca-desc">Arms are a detail session — the pump quality and muscle connection are what matters. Cardio before arms pre-fatigues the muscles and reduces the quality of the training stimulus. No cardio on Thursday.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       DAY 4 — FRIDAY — LEGS
+  ═══════════════════════════════ -->
+  <div class="day-panel" id="dp-4">
+    <div class="day-top">
+      <div class="day-top-inner">
+        <div class="day-num-big">05</div>
+        <div class="day-meta">
+          <div class="day-dow">Friday</div>
+          <div class="day-name">LEG DAY</div>
+          <div class="day-sub">Complete leg session — quads, hamstrings, glutes, calves. Athletic legs, not powerlifter legs.</div>
+          <div class="day-bdgs"><span class="bdg str">Quads</span><span class="bdg str">Hamstrings</span><span class="bdg str">Glutes</span><span class="bdg str">Calves</span><span class="bdg rec">LISS Post</span></div>
+        </div>
+        <div class="day-time"><div class="dt-val" style="color:var(--a)">~85</div><div class="dt-lbl">Min Total</div></div>
+      </div>
+      <div class="day-tl">
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--a);opacity:0.4"></div><div class="tl-lbl">Warm-Up 10m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--a)"></div><div class="tl-lbl">Legs 55m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--bl);opacity:0.6"></div><div class="tl-lbl">LISS Walk 25m</div></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--a)"></div>
+        <div class="blk-title">LEG SESSION</div>
+        <div class="blk-meta">6 exercises · ~55 min · Compound first, isolation last</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="ex-wrap">
+          <table class="ex-tbl">
+            <thead><tr><th style="width:40%">Exercise + Muscles Worked</th><th>Sets</th><th>Reps</th><th>Rest</th><th>RPE</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Back Squat</div>
+                  <div class="muscle-tags"><span class="mt quad">Quads ★★</span><span class="mt glute">Glutes ★★</span><span class="mt ham">Hamstrings</span><span class="mt core">Core / Spinal Erectors</span></div>
+                  <div class="ex-note">Belt optional at heavier weights. Depth to parallel or below. After sets 2 and 4, perform 3 Box Jumps (PAP — post-activation potentiation for explosive power output).</div>
+                  <a href="https://www.youtube.com/results?search_query=barbell+back+squat+proper+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">5</td><td class="td-reps">5–6</td><td class="td-rest">3–4 min</td><td><span class="rpe h">RPE 8–9</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Romanian Deadlift</div>
+                  <div class="muscle-tags"><span class="mt ham">Hamstrings ★★</span><span class="mt glute">Glutes ★★</span><span class="mt back">Spinal Erectors</span><span class="mt trap">Upper Traps</span></div>
+                  <div class="ex-note">3-sec eccentric every rep. Hamstring stretch is the priority — if the lower back fatigues before the hamstrings, the weight is too heavy. Bar stays close to the legs throughout.</div>
+                  <a href="https://www.youtube.com/results?search_query=romanian+deadlift+RDL+proper+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">8–10</td><td class="td-rest">2 min</td><td><span class="rpe h">RPE 8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Bulgarian Split Squat (DB)</div>
+                  <div class="muscle-tags"><span class="mt quad">Quads ★★</span><span class="mt glute">Glutes ★★</span><span class="mt ham">Hamstrings</span><span class="mt core">Core / Balance</span></div>
+                  <div class="ex-note">Front foot far enough forward that the knee stays behind the toes. Rear leg is resting only, not driving. This builds the quad-glute separation that creates the athletic leg shape.</div>
+                  <a href="https://www.youtube.com/results?search_query=bulgarian+split+squat+dumbbell+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">10–12 each</td><td class="td-rest">90 sec</td><td><span class="rpe m">RPE 7–8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Lying Leg Curl (Slow Eccentric)</div>
+                  <div class="muscle-tags"><span class="mt ham">Hamstrings ★★</span><span class="mt glute">Glute / Hip Extension</span><span class="mt calf">Gastrocnemius</span></div>
+                  <div class="ex-note">3-second eccentric every rep. This creates the hamstring detail and the separation between glute and hamstring — the line that defines an athletic lower body. Full stretch at the bottom.</div>
+                  <a href="https://www.youtube.com/results?search_query=lying+leg+curl+eccentric+hamstring+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">10–12</td><td class="td-rest">75 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Leg Extension (VMO Focus)</div>
+                  <div class="muscle-tags"><span class="mt quad">VMO / Vastus Medialis ★★</span><span class="mt quad">Rectus Femoris</span><span class="mt quad">Vastus Lateralis</span></div>
+                  <div class="ex-note">Toes slightly turned out. Squeeze hard at full extension — the terminal contraction creates VMO definition that gives legs the athletic tapered look above the knee.</div>
+                  <a href="https://www.youtube.com/results?search_query=leg+extension+machine+VMO+quad+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">15–20</td><td class="td-rest">60 sec</td><td><span class="rpe l">RPE 6–7</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Standing Calf Raise</div>
+                  <div class="muscle-tags"><span class="mt calf">Gastrocnemius ★★</span><span class="mt calf">Soleus</span></div>
+                  <div class="ex-note">2-second hold at the top. Full stretch at the bottom — heel below the platform. Calves have a high proportion of slow-twitch fibers and respond to slow, controlled reps more than fast, bouncy ones.</div>
+                  <a href="https://www.youtube.com/results?search_query=standing+calf+raise+proper+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">4</td><td class="td-reps">15–20</td><td class="td-rest">60 sec</td><td><span class="rpe m">RPE 7</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cn"><strong>Coach:</strong> Legs are one full session per week — this is appropriate for your goal. The Saturday athletic session adds functional lower body work (sprints, jumps, sled) that makes the legs athletic rather than just muscular. One leg day done properly beats two half-effort leg days.</div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--bl)"></div>
+        <div class="blk-title">CARDIO — LISS COOL-DOWN WALK</div>
+        <div class="blk-meta">Zone 2 · 25 min · Immediately post-lifting</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="cardio-blk">
+          <div class="ca liss">
+            <div class="ca-tl">Tier 1 · LISS</div>
+            <div class="ca-name">POST-LEG COOL-DOWN WALK</div>
+            <div class="ca-pills"><span class="ca-pill">25 min</span><span class="ca-pill">Easy pace</span><span class="ca-pill">Outdoors preferred</span><span class="ca-pill">No HR target</span></div>
+            <div class="ca-desc">Easy walk immediately after the session. Not intense cardio — this is a parasympathetic cool-down that drops cortisol, assists glycogen replenishment, and improves recovery heading into Saturday's athletic session.</div>
+            <div class="ca-why"><strong>Why a post-leg walk:</strong> Cortisol peaks during and after training. A 25 min easy walk brings it down faster than sitting. This directly improves Saturday's quality and reduces the heavy leg fatigue that would otherwise linger into the weekend.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       DAY 5 — SATURDAY — ATHLETIC
+  ═══════════════════════════════ -->
+  <div class="day-panel" id="dp-5">
+    <div class="day-top" style="border-color:rgba(255,109,58,0.25)">
+      <div class="day-top-inner">
+        <div class="day-num-big" style="color:rgba(255,109,58,0.12)">06</div>
+        <div class="day-meta">
+          <div class="day-dow">Saturday</div>
+          <div class="day-name" style="color:var(--or)">ATHLETIC CONDITIONING</div>
+          <div class="day-sub">Power · Sprints · Loaded carries · AMRAP. The session that builds the explosive athletic look.</div>
+          <div class="day-bdgs"><span class="bdg cond">Power</span><span class="bdg cond">Conditioning</span><span class="bdg cond">HIIT Built-In</span><span class="bdg cond">Full-Body</span></div>
+        </div>
+        <div class="day-time"><div class="dt-val" style="color:var(--or)">~65</div><div class="dt-lbl">Min Total</div></div>
+      </div>
+      <div class="day-tl">
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--or);opacity:0.4"></div><div class="tl-lbl">Warm-Up 10m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--or)"></div><div class="tl-lbl">Athletic 45m</div></div>
+        <div class="tl-seg"><div class="tl-bar" style="background:var(--bl);opacity:0.5"></div><div class="tl-lbl">Cool-Down 10m</div></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--or)"></div>
+        <div class="blk-title">ATHLETIC SESSION — 4 BLOCKS</div>
+        <div class="blk-meta">Power → Sprint HIIT → Loaded carries → AMRAP finisher</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div style="padding:14px 18px 0">
+          <div style="font-size:12.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px;padding:12px 14px;background:var(--bg2);border-left:3px solid var(--or);border-radius:0 8px 8px 0">
+            This is not a second leg day. It is a full-body athletic session that trains <strong>power expression, sprint mechanics, functional strength, and cardiovascular output</strong> — the qualities that separate a gym physique from an athletic one. It also contains the week's only true HIIT component. Move through all 4 blocks with minimal rest between blocks.
+          </div>
+        </div>
+        <div class="ex-wrap">
+          <table class="ex-tbl">
+            <thead><tr><th style="width:40%">Block / Exercise + Muscles</th><th>Sets</th><th>Volume</th><th>Rest</th><th>Intensity</th></tr></thead>
+            <tbody>
+              <tr><td colspan="5" style="padding:10px 14px;background:rgba(255,109,58,0.05);font-family:var(--fh);font-size:14px;font-weight:700;color:var(--or);letter-spacing:1px">BLOCK 1 — POWER OUTPUT (10 min)</td></tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Broad Jump</div>
+                  <div class="muscle-tags"><span class="mt quad">Quads ★</span><span class="mt glute">Glutes ★</span><span class="mt calf">Calves</span><span class="mt core">Core</span></div>
+                  <div class="ex-note">Maximum horizontal distance each rep. Full hip extension at take-off. Stick the landing with soft knees. Trains the horizontal power vector that most gym programs never touch.</div>
+                  <a href="https://www.youtube.com/results?search_query=broad+jump+horizontal+plyometric+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">5 reps</td><td class="td-rest">45 sec</td><td><span class="rpe h">Max effort</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Medicine Ball Rotational Slam</div>
+                  <div class="muscle-tags"><span class="mt core">Obliques ★★</span><span class="mt shoulder">Shoulders</span><span class="mt back">Lats</span><span class="mt core">Core Power</span></div>
+                  <div class="ex-note">Full hip rotation into an overhead slam. Explosive — not controlled. This trains rotational power that directly builds the athletic oblique definition visible at lean body fat.</div>
+                  <a href="https://www.youtube.com/results?search_query=medicine+ball+rotational+slam+power+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">8 each</td><td class="td-rest">45 sec</td><td><span class="rpe h">Explosive</span></td>
+              </tr>
+              <tr><td colspan="5" style="padding:10px 14px;background:rgba(255,109,58,0.05);font-family:var(--fh);font-size:14px;font-weight:700;color:var(--or);letter-spacing:1px">BLOCK 2 — SPRINT INTERVALS / HIIT (12 min)</td></tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Sprint Intervals</div>
+                  <div class="muscle-tags"><span class="mt quad">Quads ★</span><span class="mt ham">Hamstrings ★</span><span class="mt glute">Glutes ★</span><span class="mt calf">Calves</span><span class="mt core">Core</span></div>
+                  <div class="ex-note">ALL OUT during work intervals. If you can speak a full sentence, you are not working hard enough. Walk during recovery — do not jog. Outdoor sprints are preferred over treadmill.</div>
+                  <a href="https://www.youtube.com/results?search_query=sprint+interval+training+HIIT+outdoor+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">8</td><td class="td-reps">20 sec / 40 sec walk</td><td class="td-rest">Walk recovery</td><td><span class="rpe h">RPE 9–10</span></td>
+              </tr>
+              <tr><td colspan="5" style="padding:10px 14px;background:rgba(255,109,58,0.05);font-family:var(--fh);font-size:14px;font-weight:700;color:var(--or);letter-spacing:1px">BLOCK 3 — LOADED CARRIES + CONDITIONING (13 min)</td></tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Farmer's Carry (Heavy DBs)</div>
+                  <div class="muscle-tags"><span class="mt trap">Traps ★★</span><span class="mt core">Core ★★</span><span class="mt back">Spinal Erectors</span><span class="mt forearm">Forearms / Grip</span></div>
+                  <div class="ex-note">Walk fast, chest tall, shoulders back. Grip strength, trap thickness, and core endurance in one exercise. Builds the structural thickness that makes a physique look athletic rather than just lean.</div>
+                  <a href="https://www.youtube.com/results?search_query=farmers+carry+dumbbell+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">3</td><td class="td-reps">40 yards</td><td class="td-rest">60 sec</td><td><span class="rpe h">RPE 8</span></td>
+              </tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">Battle Rope Slams</div>
+                  <div class="muscle-tags"><span class="mt shoulder">Shoulders ★</span><span class="mt back">Lats</span><span class="mt core">Core</span><span class="mt tricep">Triceps</span></div>
+                  <div class="ex-note">Drive from the hips — not just the arms. Continuous rhythm. Metabolic conditioning plus shoulder endurance simultaneously. Keeps heart rate elevated between heavier blocks.</div>
+                  <a href="https://www.youtube.com/results?search_query=battle+rope+slams+conditioning+form+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">2</td><td class="td-reps">30 sec</td><td class="td-rest">60 sec</td><td><span class="rpe h">RPE 8–9</span></td>
+              </tr>
+              <tr><td colspan="5" style="padding:10px 14px;background:rgba(255,109,58,0.05);font-family:var(--fh);font-size:14px;font-weight:700;color:var(--or);letter-spacing:1px">BLOCK 4 — AMRAP FINISHER (10 min)</td></tr>
+              <tr>
+                <td class="ex-name-cell">
+                  <div class="ex-name">KB Swing + Goblet Squat + Push-Up Circuit</div>
+                  <div class="muscle-tags"><span class="mt glute">Glutes ★</span><span class="mt ham">Hamstrings ★</span><span class="mt chest">Chest</span><span class="mt core">Core</span><span class="mt quad">Quads</span></div>
+                  <div class="ex-note">10 KB Swings + 8 Goblet Squats + 8 Push-Ups = 1 round. AMRAP in 10 min. 3+ rounds = good conditioning. 4+ rounds = excellent. Track this number weekly — it is your conditioning benchmark.</div>
+                  <a href="https://www.youtube.com/results?search_query=kettlebell+swing+goblet+squat+push+up+circuit+tutorial" target="_blank" class="yt-link">▶ Watch Tutorial</a>
+                </td>
+                <td class="td-sets">AMRAP</td><td class="td-reps">10 min</td><td class="td-rest">None</td><td><span class="rpe h">Max rounds</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="finisher"><div class="fin-lbl">Cool-Down</div><div class="fin-txt">10 min easy walk immediately after. Non-negotiable — drops cortisol and protects Sunday recovery quality. Drink 500ml water + electrolytes during cool-down.</div></div>
+        <div class="cn"><strong>Coach:</strong> Saturday is where the athletic edge is built. This session cannot be replicated by more lifting. Power, sprint mechanics, conditioning, and loaded carries train different physical qualities than resistance training — combined they create a physique that looks and moves athletically. This is also the week's only true HIIT. Do not add more.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       DAY 6 — SUNDAY — REST
+  ═══════════════════════════════ -->
+  <div class="day-panel" id="dp-6">
+    <div class="day-top" style="border-color:rgba(255,77,109,0.15)">
+      <div class="day-top-inner">
+        <div class="day-num-big" style="color:rgba(255,77,109,0.1)">07</div>
+        <div class="day-meta">
+          <div class="day-dow">Sunday</div>
+          <div class="day-name" style="color:var(--rd)">FULL REST</div>
+          <div class="day-sub">Muscle is not built in the gym — it is built during recovery. Protect Sunday.</div>
+          <div class="day-bdgs"><span class="bdg rest">Full Rest</span><span class="bdg rec">Walk 20–30 min</span><span class="bdg rec">Mobility 20 min</span></div>
+        </div>
+        <div class="day-time"><div class="dt-val" style="color:var(--rd)">~50</div><div class="dt-lbl">Min Optional</div></div>
+      </div>
+    </div>
+    <div class="blk">
+      <div class="blk-hdr open" onclick="togBlk(this)">
+        <div class="blk-dot" style="background:var(--rd)"></div>
+        <div class="blk-title">FULL DAY PROTOCOL</div>
+        <div class="blk-meta">Walk · Mobility · Sleep · Recovery tools</div>
+        <div class="blk-arr">▼</div>
+      </div>
+      <div class="blk-body open">
+        <div class="rest-grid">
+          <div class="rest-item">
+            <div class="ri-icon">🚶</div>
+            <div class="ri-title">EASY WALK 20–30 MIN</div>
+            <div class="ri-desc">Outdoors preferred. No HR target. No pace goal. Sunlight exposure directly regulates cortisol rhythm and supports testosterone production. This is recovery, not training — there is a difference.</div>
+          </div>
+          <div class="rest-item">
+            <div class="ri-icon">🧘</div>
+            <div class="ri-title">MOBILITY 20 MIN</div>
+            <div class="ri-desc">Hip 90/90s (2 min each side), thoracic rotation, shoulder CARs, hamstring holds, couch stretch for hip flexors. Focus on wherever felt most restricted this week. This is what keeps you lifting for the next 20 years.</div>
+          </div>
+          <div class="rest-item">
+            <div class="ri-icon">😴</div>
+            <div class="ri-title">SLEEP PRIORITY</div>
+            <div class="ri-desc">Sunday night is the highest-leverage sleep of the week. Target 8–9 hours. Magnesium glycinate 400mg + zinc 30 min before bed. Room temp 65–68°F. No screens 60 min before. This is where growth hormone peaks.</div>
+          </div>
+        </div>
+        <div class="cn" style="margin:0 18px 16px"><strong>Coach:</strong> Sunday recovery determines Monday's quality. The compounding effect of consistent Sunday recovery is what separates athletes who look better at 41 than at 31 from those who plateau. It is not a wasted day — it is the most productive day of the week.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ REFERENCE SECTIONS ═══ -->
+  <div class="sec-label" style="padding-top:24px">// Reference — Tap to Expand</div>
+
+  <div class="col-sec">
+    <div class="col-hdr" onclick="tog(this)">
+      <span class="col-icon">🥩</span>
+      <span class="col-title">NUTRITION FRAMEWORK</span>
+      <span class="col-meta">2,700 kcal · High protein recomp · Not a crash diet</span>
+      <span class="col-arr">▼</span>
+    </div>
+    <div class="col-body">
+      <div class="ref-pad">
+        <div class="cal-big">2,700</div>
+        <div class="cal-sub">// Daily Target — ~400 kcal below TDEE</div>
+        <div class="macro-r"><div class="macro-lbl">Protein</div><div class="macro-bar"><div class="macro-fill" style="width:42%;background:var(--a)"></div></div><div class="macro-val">285g / day</div></div>
+        <div class="macro-r"><div class="macro-lbl">Carbs</div><div class="macro-bar"><div class="macro-fill" style="width:35%;background:var(--bl)"></div></div><div class="macro-val">235g / day</div></div>
+        <div class="macro-r"><div class="macro-lbl">Fats</div><div class="macro-bar"><div class="macro-fill" style="width:23%;background:var(--yw)"></div></div><div class="macro-val">68g / day</div></div>
+        <div class="ref-p" style="margin-top:14px">Training days: add 150–200 kcal from carbs peri-workout. Rest day (Sunday): reduce carbs by 50–75g. <strong>Protein stays fixed at 285g every single day.</strong> Never drop fats below 68g — testosterone synthesis requires dietary fat.</div>
+      </div>
+      <div class="ref-grid-2">
+        <div class="rc"><div class="rc-t">Best Protein Sources</div><ul class="rc-l"><li>Chicken breast, turkey, lean bison — high protein per calorie</li><li>Salmon, tilapia, shrimp — protein + omega-3 combination</li><li>Whole eggs + egg whites — leucine-rich, highly bioavailable</li><li>Greek yogurt, cottage cheese — casein protein, gut health</li><li>Lean beef 93%+ — creatine, zinc, iron, B12 in one food</li><li>Whey isolate post-workout — fast leucine spike when needed</li></ul></div>
+        <div class="rc"><div class="rc-t">Meal Timing</div><ul class="rc-l"><li>Meal 1 (AM): 4 eggs + oats + fruit — protein + carbs to start</li><li>Pre-workout (60–90 min): 40g protein + 50–70g carbs whole food</li><li>Post-workout (within 60 min): Whey + banana or rice — fast leucine</li><li>Meal 3 (afternoon): Lean protein + complex carbs + vegetables</li><li>Meal 4 (evening): Lean protein + healthy fats + low-carb veg</li><li>Pre-bed optional: Casein or cottage cheese — overnight MPS</li></ul></div>
+        <div class="rc"><div class="rc-t">Hydration</div><ul class="rc-l"><li>Baseline: 3.5–4 litres daily minimum</li><li>Add 500–750ml per training hour to replace sweat</li><li>500ml water immediately on waking — before coffee</li><li>Electrolytes on training days: sodium, potassium, magnesium</li><li>Coffee max 1–3 cups. None after 2PM — protect sleep quality</li><li>Alcohol max 1–2 drinks per week — disrupts testosterone and GH</li></ul></div>
+        <div class="rc"><div class="rc-t">Avoid These</div><ul class="rc-l"><li>Liquid calories — juice, soda, alcohol fill deficit with nothing useful</li><li>Ultra-processed carbs — spike and crash impair training quality</li><li>Late-night heavy carbs — disrupts cortisol and insulin rhythm overnight</li><li>Skipping meals — MPS requires consistent amino acid availability</li><li>Crash dieting below 2,400 kcal — destroys testosterone and muscle simultaneously</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sec">
+    <div class="col-hdr" onclick="tog(this)">
+      <span class="col-icon">🛌</span>
+      <span class="col-title">RECOVERY SYSTEM</span>
+      <span class="col-meta">Sleep · Deload logic · Supplements · HRV</span>
+      <span class="col-arr">▼</span>
+    </div>
+    <div class="col-body">
+      <div class="ref-pad"><div class="ref-p">Recovery is structured programming — not an afterthought. Connective tissue, tendons, and the endocrine system accumulate fatigue faster than muscles signal it. <strong>The training you do is only as good as the recovery that follows it.</strong></div></div>
+      <div class="ref-grid-2">
+        <div class="rc"><div class="rc-t">🛌 Sleep</div><ul class="rc-l"><li>Target 7.5–9 hours. Below 7 hrs impairs testosterone and GH significantly.</li><li>Consistent bed and wake times — regulates cortisol rhythm</li><li>Room temp 65–68°F (18–20°C) — optimal for deep sleep and GH release</li><li>No screens 60 min before bed — blue light suppresses melatonin up to 50%</li><li>Magnesium glycinate 400mg + zinc 30mg before bed</li></ul></div>
+        <div class="rc"><div class="rc-t">💊 Core Supplements</div><ul class="rc-l"><li>Creatine monohydrate 5g daily — no loading needed. Every day, not just training days.</li><li>Omega-3 fish oil 3–4g daily — reduces systemic inflammation, supports joints</li><li>Vitamin D3 (3,000–5,000 IU) + K2 — testosterone support, immune function</li><li>Ashwagandha 600mg — reduces cortisol, supports testosterone at 40+</li></ul></div>
+        <div class="rc"><div class="rc-t">❤️ HRV Monitoring</div><ul class="rc-l"><li>Track HRV daily — WHOOP, Garmin, or Oura Ring</li><li>HRV 10–15% below 7-day average: reduce session intensity to 70%</li><li>HRV 20%+ below average: LISS or full rest only</li><li>Resting HR target: below 52 bpm = strong aerobic base</li><li>Trust HRV data over how you subjectively "feel"</li></ul></div>
+        <div class="rc"><div class="rc-t">🧊 Cold Exposure</div><ul class="rc-l"><li>Cold plunge or shower (50–59°F) 3–4× weekly</li><li>2–5 minutes per session — benefits plateau after 6 min</li><li>Do NOT use immediately post-hypertrophy — wait 4–6 hours</li><li>Sunday and Wednesday are ideal cold exposure days</li><li>Reduces inflammation, improves dopamine baseline, regulates cortisol</li></ul></div>
+      </div>
+      <div style="padding:0 18px">
+        <div class="rc-t" style="font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:10px">📅 Deload — Every 4th Week</div>
+        <div class="ref-p">Connective tissue and nervous system fatigue accumulate faster than muscles signal. Deload every 4th week — it is not weakness, it is programming intelligence.</div>
+      </div>
+      <div class="period-row">
+        <div class="pw"><div class="pw-n">W1</div><div class="pw-l">Normal</div></div>
+        <div class="pw"><div class="pw-n">W2</div><div class="pw-l">+5% Vol</div></div>
+        <div class="pw"><div class="pw-n">W3</div><div class="pw-l">+10% Vol</div></div>
+        <div class="pw act"><div class="pw-n">W4</div><div class="pw-l">Deload</div></div>
+        <div class="pw"><div class="pw-n">W5</div><div class="pw-l">New Phase</div></div>
+      </div>
+      <div class="cn" style="margin:10px 18px 16px"><strong>Deload Week:</strong> Reduce all working weights by 40–50%. Cut sets to 2–3. Keep frequency and movement patterns identical. Remove all HIIT and Saturday conditioning. LISS only — max 3 × 30 min. Use the week to work on mobility and technique.</div>
+      <div style="padding:0 18px 16px"><div class="warn-strip"><strong>Overtraining Warning:</strong> Persistent flat energy, declining libido, irritability, joint aches that don't resolve, or resting HR 5+ bpm above baseline for 3 consecutive days — reduce volume immediately. Do not push through. The training stimulus from an overtrained state is zero.</div></div>
+    </div>
+  </div>
+
+  <div class="col-sec">
+    <div class="col-hdr" onclick="tog(this)">
+      <span class="col-icon">📊</span>
+      <span class="col-title">PROGRESS TRACKING</span>
+      <span class="col-meta">5 metrics · Weekly check-in · What actually matters</span>
+      <span class="col-arr">▼</span>
+    </div>
+    <div class="col-body">
+      <div class="ref-pad"><div class="ref-p">Scale weight alone is the worst metric for recomp. <strong>Waist dropping while weight holds flat = fat loss with muscle retention.</strong> That is the goal. Use all five metrics together.</div></div>
+      <div class="ref-grid-3">
+        <div class="rc"><div class="rc-t">⚖️ Body Weight</div><ul class="rc-l"><li>Weigh daily — log the 7-day average as your real trend</li><li>Target 0.5–1.0 lb/week fat loss in recomp</li><li>Day-to-day swings of 2–4 lbs are water and glycogen — ignore them</li><li>3-week flat average = reduce calories 100–150 kcal</li></ul></div>
+        <div class="rc"><div class="rc-t">📏 Waist</div><ul class="rc-l"><li>Measure weekly at the navel, relaxed (not flexed)</li><li>Best single indicator of visceral fat loss</li><li>Waist dropping + weight stable = recomp happening — success</li><li>Target below 33" for full abdominal definition</li></ul></div>
+        <div class="rc"><div class="rc-t">📸 Photos</div><ul class="rc-l"><li>Front, side, rear — every 2 weeks</li><li>Same lighting, same time, same conditions — always</li><li>Compare 2-week pairs, not week-to-week</li><li>Photos catch visual changes that scale and tape miss</li></ul></div>
+        <div class="rc"><div class="rc-t">🏋️ Strength</div><ul class="rc-l"><li>Log top working sets: Incline, OHP, Pull-Up, Squat</li><li>Maintaining numbers = not losing muscle</li><li>Gaining in a deficit = elite recomposition</li><li>Consistent drops = deficit too aggressive — add 150 kcal</li></ul></div>
+        <div class="rc"><div class="rc-t">🧠 Wellbeing</div><ul class="rc-l"><li>Daily: rate Energy / Mood / Motivation on 1–10</li><li>3-day average below 6 = adjust — calories, sleep, or volume</li><li>This score predicts overtraining before the body breaks down</li></ul></div>
+        <div class="rc"><div class="rc-t">🏃 Conditioning</div><ul class="rc-l"><li>Track resting HR weekly (morning, pre-coffee)</li><li>Track AMRAP rounds on Saturday — weekly benchmark</li><li>Target resting HR below 52 bpm</li><li>Rounds increasing over weeks = conditioning improving</li></ul></div>
+      </div>
+      <div class="pci-grid">
+        <div class="pci"><div class="pci-i">⚖️</div><div class="pci-l">Weight Avg</div><div class="pci-n">7-day vs last week</div></div>
+        <div class="pci"><div class="pci-i">📏</div><div class="pci-l">Waist</div><div class="pci-n">Navel, relaxed</div></div>
+        <div class="pci"><div class="pci-i">💪</div><div class="pci-l">Strength</div><div class="pci-n">3 key lift tops</div></div>
+        <div class="pci"><div class="pci-i">😴</div><div class="pci-l">Sleep Avg</div><div class="pci-n">Hours this week</div></div>
+        <div class="pci"><div class="pci-i">❤️</div><div class="pci-l">HRV</div><div class="pci-n">Up / flat / down?</div></div>
+        <div class="pci"><div class="pci-i">⚡</div><div class="pci-l">Energy</div><div class="pci-n">1–10 avg</div></div>
+        <div class="pci"><div class="pci-i">🔥</div><div class="pci-l">AMRAP</div><div class="pci-n">Sat rounds</div></div>
+        <div class="pci"><div class="pci-i">🎯</div><div class="pci-l">1 Change</div><div class="pci-n">Next week adjust</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sec">
+    <div class="col-hdr" onclick="tog(this)">
+      <span class="col-icon">📅</span>
+      <span class="col-title">16-WEEK PERIODIZATION</span>
+      <span class="col-meta">4 phases · Progressive overload · Long-term structure</span>
+      <span class="col-arr">▼</span>
+    </div>
+    <div class="col-body">
+      <div class="ref-pad"><div class="ref-p">Four 4-week mesocycles. Volume and intensity vary deliberately across phases to drive continuous adaptation. Do not repeat Phase 1 indefinitely — the phases build on each other.</div></div>
+      <div class="ref-grid-2">
+        <div class="rc" style="border-color:rgba(0,240,168,0.22);background:rgba(0,240,168,0.03)"><div class="rc-t" style="color:var(--a)">Phase 1 · Weeks 1–4 (ACTIVE)</div><ul class="rc-l"><li>Volume Base — 10–15 rep range, moderate loads, build capacity</li><li>Build metabolic stress and mitochondrial density</li><li>Establish movement quality and connective tissue conditioning</li><li>Week 4 = Deload</li></ul></div>
+        <div class="rc"><div class="rc-t">Phase 2 · Weeks 5–8</div><ul class="rc-l"><li>Intensification — shift to 6–10 rep range on compounds</li><li>Strength retention prioritized. Volume maintained via supersets.</li><li>Cardio volume holds steady — do not increase</li><li>Week 8 = Deload</li></ul></div>
+        <div class="rc"><div class="rc-t">Phase 3 · Weeks 9–12</div><ul class="rc-l"><li>Peak Output — 3–5 rep range on compounds, maximum tension</li><li>Most demanding phase — sleep and nutrition must be tight</li><li>Cardio volume peaks simultaneously with training intensity</li><li>Week 12 = Deload</li></ul></div>
+        <div class="rc"><div class="rc-t">Phase 4 · Weeks 13–16</div><ul class="rc-l"><li>Realization — W13 Deload, peak conditioning W14–15</li><li>Week 16: maintenance volume + photo check-in</li><li>Decision: new 16-week block or transition to maintenance</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 12-WEEK CUT PHASING ══ -->
+  <div class="col-sec">
+    <div class="col-hdr" onclick="tog(this)">
+      <span class="col-icon">📆</span>
+      <span class="col-title">12-WEEK CUT PHASING</span>
+      <span class="col-meta">3 phases · Calories · Cardio · Steps · Expected look</span>
+      <span class="col-arr">▼</span>
+    </div>
+    <div class="col-body">
+      <div class="ref-pad">
+        <div class="ref-p">The cut is phased so you get leaner without crashing performance or muscle mass. Each phase applies slightly more pressure — more cardio, lower calories, more steps — while protecting strength and fullness. <strong>Start Phase 1. Move to Phase 2 only when fat loss stalls or after 4 weeks.</strong></div>
+      </div>
+      <div class="phase-strip">
+        <div class="ph-card p1">
+          <div class="ph-title">Phase 1 · Weeks 1–4</div>
+          <span class="ph-badge">Foundation</span>
+          <ul class="ph-list">
+            <li>Calories ~2,300–2,400 kcal</li>
+            <li>Protein above 200g — non-negotiable</li>
+            <li>LISS 3× weekly, 30 min each session</li>
+            <li>HIIT 1× weekly (Saturday athletic session)</li>
+            <li>Daily steps target 8,000–10,000</li>
+            <li>Priority: build rhythm, perfect execution, steady fat loss</li>
+          </ul>
+          <div class="ph-bar-wrap">
+            <div class="ph-bar-label"><span>Expected Visual Change</span><span>Tighter midsection</span></div>
+            <div class="ph-bar"><div class="ph-bar-fill" style="width:34%"></div></div>
+          </div>
+        </div>
+        <div class="ph-card p2">
+          <div class="ph-title">Phase 2 · Weeks 5–8</div>
+          <span class="ph-badge">Recomposition</span>
+          <ul class="ph-list">
+            <li>Calories ~2,100–2,200 kcal</li>
+            <li>LISS 4× weekly, 35–45 min each</li>
+            <li>HIIT 1–2× weekly</li>
+            <li>Daily steps target 10,000–12,000</li>
+            <li>Add one intensity technique (drop set or rest-pause) on the final set of selected isolation exercises only</li>
+            <li>Deload in Week 7 or 8 — reduce volume ~30%</li>
+          </ul>
+          <div class="ph-bar-wrap">
+            <div class="ph-bar-label"><span>Expected Visual Change</span><span>Waist down, muscles pop</span></div>
+            <div class="ph-bar"><div class="ph-bar-fill" style="width:66%"></div></div>
+          </div>
+        </div>
+        <div class="ph-card p3">
+          <div class="ph-title">Phase 3 · Weeks 9–12</div>
+          <span class="ph-badge">Peak Definition</span>
+          <ul class="ph-list">
+            <li>Calories ~1,900–2,100 kcal — no crash dieting below 1,900</li>
+            <li>LISS 4–5× weekly</li>
+            <li>HIIT 2× weekly maximum</li>
+            <li>Daily steps 12,000+</li>
+            <li>Keep training volume steady — execution quality protects muscle fullness</li>
+            <li>This is where the look is locked in — trust the process</li>
+          </ul>
+          <div class="ph-bar-wrap">
+            <div class="ph-bar-label"><span>Expected Visual Change</span><span>Visible abs, lean face</span></div>
+            <div class="ph-bar"><div class="ph-bar-fill" style="width:94%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DOUBLE PROGRESSION + ADJUSTMENT RULES ══ -->
+  <div class="col-sec">
+    <div class="col-hdr" onclick="tog(this)">
+      <span class="col-icon">📈</span>
+      <span class="col-title">PROGRESSION &amp; ADJUSTMENT RULES</span>
+      <span class="col-meta">How to progress lifts · When to adjust calories or cardio</span>
+      <span class="col-arr">▼</span>
+    </div>
+    <div class="col-body">
+      <div class="ref-pad">
+        <div style="font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0.5px;margin-bottom:8px">Double Progression — How to Progress Lifts on a Cut</div>
+        <div class="ref-p">On a cut, the win is maintaining performance while reps trend upward inside the target range. Never chase weekly weight jumps — chase rep quality and consistency first. Once all sets hit the top of the rep range cleanly, increase the weight modestly.</div>
+      </div>
+      <div class="prog-timeline">
+        <div class="pt-item">
+          <div class="pt-week">Week 1</div>
+          <div class="pt-desc">Start at a challenging but manageable weight. Example: Incline DB Press <strong>4 × 6</strong> at chosen load. All reps clean, stop 1–2 reps before failure.</div>
+        </div>
+        <div class="pt-item">
+          <div class="pt-week">Week 2</div>
+          <div class="pt-desc">Same weight. If energy and execution are good, push to <strong>7 reps</strong> on the early sets. Do not chase it — let it happen naturally.</div>
+        </div>
+        <div class="pt-item">
+          <div class="pt-week">Week 3</div>
+          <div class="pt-desc">Continue filling the <strong>6–8 rep range</strong> with high-quality reps. The goal is every set hitting the top end cleanly before adding weight.</div>
+        </div>
+        <div class="pt-item">
+          <div class="pt-week">Week 4</div>
+          <div class="pt-desc">All sets at <strong>8 clean reps</strong>? Increase the weight modestly next session and restart the progression cycle. This is controlled, sustainable overload during a deficit.</div>
+        </div>
+        <div class="pt-item" style="border-color:rgba(255,109,58,0.25);background:rgba(255,109,58,0.04)">
+          <div class="pt-week" style="color:var(--or)">Stalling</div>
+          <div class="pt-desc">If reps drop or performance crashes for 2+ sessions, do <strong>not</strong> reduce weight immediately. First check: sleep, calories, stress load. If those are fine, reduce intensity techniques before touching load.</div>
+        </div>
+      </div>
+
+      <div style="padding:14px 18px 10px;font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0.5px">Intensity Techniques — Rules</div>
+      <div class="ref-grid-2" style="padding-top:0">
+        <div class="rc">
+          <div class="rc-t">When to Use Them</div>
+          <ul class="rc-l">
+            <li>Compounds: stop 1–2 reps before failure — always. No exceptions.</li>
+            <li>Isolation exercises: one intensity technique on the <strong>final set only</strong></li>
+            <li>Best options: drop set, rest-pause, slow eccentric, or stretch overload</li>
+            <li>Only use when recovery is solid — not on back-to-back hard days</li>
+            <li>If performance drops, remove intensity techniques before removing exercises</li>
+          </ul>
+        </div>
+        <div class="rc">
+          <div class="rc-t">Deload Rule</div>
+          <ul class="rc-l">
+            <li>Deload around Week 7 or 8 — reduce volume ~30%, keep intensity</li>
+            <li>Signs you need it early: persistent joint aches, flat pumps, declining motivation</li>
+            <li>Deload does not mean stopping — keep moving, reduce load and sets</li>
+            <li>After deload, performance typically bounces back above pre-deload levels</li>
+            <li>Never skip the deload to "stay on track" — it is the track</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="padding:14px 18px 10px;font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0.5px">When Fat Loss Stalls — Use One Lever at a Time</div>
+      <div class="adj-grid">
+        <div class="adj-card">
+          <div class="adj-trigger">// Trigger: No weight or waist change for 10–14 days</div>
+          <div class="adj-title">Option 1 — Cut Calories</div>
+          <div class="adj-actions">
+            <div class="adj-action"><span class="adj-num">Step 1</span>Reduce calories by 150–200 kcal only. Never more in one adjustment.</div>
+            <div class="adj-action"><span class="adj-num">Step 2</span>Take it from carbs first. Never from protein. Drop fats only as a last resort.</div>
+            <div class="adj-action"><span class="adj-num">Step 3</span>Wait 10–14 days before making another change. One lever at a time.</div>
+          </div>
+        </div>
+        <div class="adj-card">
+          <div class="adj-trigger">// Trigger: No weight or waist change for 10–14 days</div>
+          <div class="adj-title">Option 2 — Add Cardio</div>
+          <div class="adj-actions">
+            <div class="adj-action"><span class="adj-num">Step 1</span>Add 10–15 min to existing LISS sessions. Do not jump to more HIIT.</div>
+            <div class="adj-action"><span class="adj-num">Step 2</span>Alternatively, increase daily steps by 1,500–2,000. NEAT burns add up fast.</div>
+            <div class="adj-action"><span class="adj-num">Step 3</span>Never touch lifting volume as a fat loss lever — that is the last resort.</div>
+          </div>
+        </div>
+        <div class="adj-card">
+          <div class="adj-trigger">// Trigger: Performance crashing, energy collapsing</div>
+          <div class="adj-title">Option 3 — Add Calories Back</div>
+          <div class="adj-actions">
+            <div class="adj-action"><span class="adj-num">Step 1</span>Add 150 kcal from carbs. Do not panic — the scale will go up briefly from glycogen.</div>
+            <div class="adj-action"><span class="adj-num">Step 2</span>If performance returns within 5–7 days, you were simply under-fueled. Stay at new level.</div>
+            <div class="adj-action"><span class="adj-num">Step 3</span>Resume fat loss strategy after 1 week of re-feeding.</div>
+          </div>
+        </div>
+        <div class="adj-card">
+          <div class="adj-trigger">// Trigger: Scale moving but mirror looks flat</div>
+          <div class="adj-title">Option 4 — Check Steps + Sleep</div>
+          <div class="adj-actions">
+            <div class="adj-action"><span class="adj-num">Step 1</span>Flatness = low glycogen or poor sleep. Check both before changing anything else.</div>
+            <div class="adj-action"><span class="adj-num">Step 2</span>Sleep below 7 hours consistently suppresses GH and testosterone — fix this first.</div>
+            <div class="adj-action"><span class="adj-num">Step 3</span>10,000 steps daily is not optional during a cut. NEAT is the silent calorie deficit.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<footer>
+  <div class="foot-logo">APEX</div>
+  <div class="foot-sub">// Elite Training System · Bro Split Evolved · One Muscle Per Day · Phase 1 of 4</div>
+  <div class="foot-disc">Consult a physician before beginning any new training or nutrition protocol. Results depend on adherence, recovery quality, nutrition, and individual genetics.</div>
+</footer>
+
+
+<script>
+// ── COLLAPSIBLES ──
+function tog(hdr){const b=hdr.nextElementSibling;const o=hdr.classList.toggle('open');b.classList.toggle('open',o)}
+function togBlk(hdr){const b=hdr.nextElementSibling;const o=hdr.classList.toggle('open');b.classList.toggle('open',o)}
+function selDay(idx,btn){
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.day-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('dp-'+idx).classList.add('active');
+}
+
+// ── PROGRAM TRACKER ──
+const TOTAL_WEEKS = 16;
+const PHASE_NAMES = ['VOLUME BASE','INTENSIFICATION','PEAK OUTPUT','REALIZATION'];
+const PHASE_COLORS = ['var(--a)','var(--bl)','var(--yw)','var(--or)'];
+const STORAGE_KEY = 'apex_program_start_date';
+
+function getStartDate() {
+  return localStorage.getItem(STORAGE_KEY);
+}
+
+function setStartDate() {
+  const input = document.getElementById('startDateInput');
+  const val = input.value;
+  if (!val) { alert('Please select a start date.'); return; }
+  localStorage.setItem(STORAGE_KEY, val);
+  updateTracker();
+}
+
+function resetStartDate() {
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('startDateInput').value = '';
+  document.getElementById('resetBtn').style.display = 'none';
+  updateTracker();
+}
+
+function updateTracker() {
+  const stored = getStartDate();
+  const barWrap = document.getElementById('trackerBarWrap');
+
+  if (!stored) {
+    document.getElementById('tsWeek').textContent = '—';
+    document.getElementById('tsPhase').textContent = '—';
+    document.getElementById('tsDaysLeft').textContent = '—';
+    document.getElementById('tsTotal').textContent = '—';
+    document.getElementById('trackerStatusBadge').className = 'tracker-status notset';
+    document.getElementById('trackerStatusBadge').textContent = '● Set your start date to begin tracking';
+    document.getElementById('weekDots').innerHTML = '';
+    document.getElementById('phaseLabels').innerHTML = '';
+    document.getElementById('resetBtn').style.display = 'none';
+    barWrap.style.display = 'none';
+    document.querySelector('.nav-tag').textContent = 'Phase 1 · Active';
+    return;
+  }
+
+  document.getElementById('resetBtn').style.display = '';
+  barWrap.style.display = '';
+
+  const start = new Date(stored + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  start.setHours(0,0,0,0);
+
+  const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+
+  // If before start date
+  if (diffDays < 0) {
+    const daysUntil = Math.abs(diffDays);
+    document.getElementById('tsWeek').textContent = '0';
+    document.getElementById('tsPhase').textContent = '—';
+    document.getElementById('tsDaysLeft').textContent = '—';
+    document.getElementById('tsTotal').textContent = '0';
+    document.getElementById('trackerStatusBadge').className = 'tracker-status notset';
+    document.getElementById('trackerStatusBadge').textContent = '● Program starts in ' + daysUntil + ' day' + (daysUntil === 1 ? '' : 's');
+    buildDots(0);
+    barWrap.style.display = 'none';
+    return;
+  }
+
+  const currentWeek = Math.min(Math.floor(diffDays / 7) + 1, TOTAL_WEEKS);
+  const isDeload = currentWeek % 4 === 0;
+  const phase = Math.min(Math.ceil(currentWeek / 4), 4);
+  const phaseWeekNum = ((currentWeek - 1) % 4) + 1; // 1–4 within phase
+  const phaseWeeksRemaining = 4 - phaseWeekNum;
+  const daysIntoWeek = diffDays % 7;
+  const daysLeftInPhase = (phaseWeeksRemaining * 7) + (7 - daysIntoWeek);
+
+  const totalProgramDays = TOTAL_WEEKS * 7;
+  const pct = Math.min(Math.round((diffDays / totalProgramDays) * 100), 100);
+
+  // Update stat cards
+  const weekEl = document.getElementById('tsWeek');
+  weekEl.textContent = currentWeek > TOTAL_WEEKS ? '✓' : currentWeek;
+  weekEl.className = 'ts-val' + (isDeload ? ' deload' : '');
+
+  document.getElementById('tsPhase').textContent = phase;
+  document.getElementById('tsDaysLeft').textContent = currentWeek > TOTAL_WEEKS ? '0' : daysLeftInPhase;
+  document.getElementById('tsTotal').textContent = diffDays;
+
+  // Status badge
+  const badge = document.getElementById('trackerStatusBadge');
+  if (currentWeek > TOTAL_WEEKS) {
+    badge.className = 'tracker-status normal';
+    badge.textContent = '✓ 16-Week Program Complete';
+  } else if (isDeload) {
+    badge.className = 'tracker-status deload';
+    badge.textContent = '⚡ DELOAD WEEK — Reduce volume 40–50%';
+  } else {
+    badge.className = 'tracker-status normal';
+    badge.textContent = '● Phase ' + phase + ' · ' + PHASE_NAMES[phase-1] + ' · Week ' + currentWeek + ' of 16';
+  }
+
+  // Progress bar
+  const fill = document.getElementById('trackerBarFill');
+  fill.style.width = pct + '%';
+  fill.className = 'tracker-bar-fill' + (isDeload ? ' deload-fill' : '');
+  document.getElementById('trackerBarLabel').textContent = 'Program Progress · Phase ' + phase + ' of 4';
+  document.getElementById('trackerBarPct').textContent = pct + '%';
+
+  // Update nav
+  document.querySelector('.nav-tag').textContent = 'Week ' + Math.min(currentWeek, 16) + ' · Phase ' + phase + (isDeload ? ' · DELOAD' : '');
+
+  buildDots(currentWeek);
+
+  // Set the input to stored date
+  document.getElementById('startDateInput').value = stored;
+}
+
+function buildDots(currentWeek) {
+  const container = document.getElementById('weekDots');
+  const phaseContainer = document.getElementById('phaseLabels');
+  container.innerHTML = '';
+  phaseContainer.innerHTML = '';
+
+  for (let w = 1; w <= TOTAL_WEEKS; w++) {
+    const dot = document.createElement('div');
+    const isDeloadW = w % 4 === 0;
+    dot.className = 'wd';
+    if (isDeloadW) dot.classList.add('deload-dot');
+    if (w < currentWeek) dot.classList.add('done');
+    if (w === currentWeek) dot.classList.add('current');
+    dot.textContent = w;
+    dot.title = 'Week ' + w + (isDeloadW ? ' (Deload)' : '') + ' · Phase ' + Math.ceil(w/4);
+    container.appendChild(dot);
+  }
+
+  // Phase labels
+  for (let p = 1; p <= 4; p++) {
+    const pl = document.createElement('div');
+    pl.className = 'pl';
+    const phase = Math.ceil(currentWeek / 4);
+    if (p === phase) pl.classList.add('active-phase');
+    pl.textContent = 'P' + p + ' · ' + PHASE_NAMES[p-1].split(' ')[0];
+    phaseContainer.appendChild(pl);
+  }
+}
+
+// Init on load
+document.addEventListener('DOMContentLoaded', function() {
+  updateTracker();
+  // Auto-refresh at midnight
+  const now = new Date();
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 5);
+  setTimeout(updateTracker, midnight - now);
+});
+</script>
+
+</body>
+</html>
